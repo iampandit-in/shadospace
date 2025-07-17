@@ -10,25 +10,27 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import db from "@/db";
 import { postsTable, usersTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
-export default function Feed() {
-  const data = db
+export default async function Feed() {
+  const data = await db
     .select()
     .from(postsTable)
     .innerJoin(usersTable, eq(postsTable.userId, usersTable.id))
-    .limit(10);
-  console.log(data);
+    .orderBy(desc(postsTable.createdAt));
+
   return (
     <div className="grid col-span-1 md:grid-cols-2">
-      <div>
-        <div className="mt-4">
+      {data.map((a) => (
+        <div key={a.posts.id} className="mt-4">
           <Card>
             <CardHeader>
-              <CardTitle>this is the card title</CardTitle>
-              <CardDescription>this is card desc</CardDescription>
+              <CardTitle>{a.posts.title}</CardTitle>
+              <CardDescription>{a.posts.content}</CardDescription>
             </CardHeader>
-            <CardContent>hello</CardContent>
+            <CardContent>
+              {a.posts.image && <img src={a.posts.image} alt={a.posts.title} />}
+            </CardContent>
             <CardFooter>
               <CardDescription className="flex items-center gap-2">
                 <Avatar>
@@ -39,14 +41,14 @@ export default function Feed() {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <span>
-                  <p>John Doe</p>
-                  <p>1234567890</p>
+                  <p>{a.users.name}</p>
+                  <p>{a.users.createdAt.toString()}</p>
                 </span>
               </CardDescription>
             </CardFooter>
           </Card>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
