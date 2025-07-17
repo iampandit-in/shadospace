@@ -19,7 +19,7 @@ const Header = () => {
         <Link href={"/"} className='text-2xl font-bold text-red-400'>
           <div className='flex items-center gap-2'>
             <Image src={"/logo.jpg"} alt="DevLogs" width={35} height={35} className='rounded-sm' />
-            <h1>shadospace</h1>
+            <h1 className='font-semibold'>shadospace</h1>
           </div>
         </Link>
         <div>
