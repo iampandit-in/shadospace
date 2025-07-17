@@ -1,20 +1,12 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import db from "@/db";
 import { postsTable, usersTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default async function Feed() {
+export default async function Posts() {
   const data = await db
     .select()
     .from(postsTable)
@@ -25,7 +17,6 @@ export default async function Feed() {
     <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4">
       {data.map((a) => (
         <div key={a.posts.id} className="mt-4 grid-cols-2">
-          <Link href={`/post/${a.posts.id}`}>
           <Card>
             <CardHeader>
               <CardTitle>{a.posts.title}</CardTitle>
@@ -58,7 +49,6 @@ export default async function Feed() {
               </CardDescription>
             </CardFooter>
           </Card>
-        </Link>
         </div>
       ))}
     </div>

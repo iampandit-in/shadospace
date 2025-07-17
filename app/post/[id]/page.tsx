@@ -1,31 +1,18 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import db from "@/db";
 import { postsTable, usersTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default async function Feed() {
-  const data = await db
-    .select()
-    .from(postsTable)
-    .innerJoin(usersTable, eq(postsTable.userId, usersTable.id))
-    .orderBy(desc(postsTable.createdAt));
+export default async function Post({ params }: { params: { id: string } }) {
+  const data = await db.select().from(postsTable).where(eq(postsTable.id, params.id)).innerJoin(usersTable, eq(postsTable.userId, usersTable.id));
 
   return (
-    <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4">
+    <div className="max-w-7xl mx-auto p-5 mt-20 grid col-span-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4">
       {data.map((a) => (
         <div key={a.posts.id} className="mt-4 grid-cols-2">
-          <Link href={`/post/${a.posts.id}`}>
           <Card>
             <CardHeader>
               <CardTitle>{a.posts.title}</CardTitle>
@@ -58,7 +45,6 @@ export default async function Feed() {
               </CardDescription>
             </CardFooter>
           </Card>
-        </Link>
         </div>
       ))}
     </div>
