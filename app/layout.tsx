@@ -25,6 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="manifest" href="/site.webmanifest" />
       <body
         className={`${geistSans.className} ${geistMono.variable} antialiased dark`}
       >
