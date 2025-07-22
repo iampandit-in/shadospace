@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
-export default function CreatePostForm () {
+export default function CreatePostForm() {
     return (
         <form className="max-w-2xl mt-22 mx-auto p-5">
             <h1 className="text-2xl font-semibold mb-4">Create a New Post</h1>
@@ -12,5 +12,5 @@ export default function CreatePostForm () {
                 Submit Post
             </Button>
         </form>
-            )
+    )
 }
