@@ -16,10 +16,10 @@ const Header = () => {
   return (
     <div className='border-b fixed top-0 left-0 right-0 z-50 backdrop-blur-md'>
       <div className='max-w-7xl flex items-center justify-between p-5 mx-auto'>
-        <Link href={"/"} className='text-2xl font-bold text-red-400'>
+        <Link href={"/"}>
           <div className='flex items-center gap-2'>
-            <Image src={"/logo.jpg"} alt="DevLogs" width={35} height={35} className='rounded-sm' />
-            <h1 className='font-semibold'>shadospace</h1>
+            <Image src={"/logo.jpg"} alt="DevLogs" width={32} height={32} className='rounded-sm invert' />
+            <h1 className='text-2xl font-medium'>Shadospace</h1>
           </div>
         </Link>
         <div>
