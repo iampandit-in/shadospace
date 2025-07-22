@@ -85,11 +85,8 @@ export default async function Header() {
           </div>
         ) : (
           <div className='flex items-center gap-2'>
-            <Link href={"/login"}>
-              <Button className='cursor-pointer' variant={"outline"}>Login</Button>
-            </Link>
             <Link href={"/register"}>
-              <Button className='cursor-pointer'>Register</Button>
+              <Button variant={"outline"} className='cursor-pointer'>Sign In</Button>
             </Link>
           </div>
         )}
