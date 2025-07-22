@@ -1,6 +1,6 @@
 import React from "react";
 import db from "@/db";
-import { postsTable, usersTable } from "@/db/schema";
+import { post, user } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,9 +9,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default async function Posts() {
   const data = await db
     .select()
-    .from(postsTable)
-    .innerJoin(usersTable, eq(postsTable.userId, usersTable.id))
-    .orderBy(desc(postsTable.createdAt));
+    .from(post)
+    .innerJoin(user, eq(post.userId, user.id))
+    .orderBy(desc(post.createdAt));
 
   return (
     <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4">
