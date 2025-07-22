@@ -1,30 +1,23 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import db from "@/db";
-import { postsTable, usersTable } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
 import Link from "next/link";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
+import { post, user, } from "@/db/schema";
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
 
+
 export default async function Feed() {
   const data = await db
     .select()
-    .from(postsTable)
-    .innerJoin(usersTable, eq(postsTable.userId, usersTable.id))
-    .orderBy(desc(postsTable.createdAt));
+    .from(post)
+    .innerJoin(user, eq(post.userId, user.id))
+    .orderBy(desc(post.createdAt));
 
   return (
     <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-4 gap-4">

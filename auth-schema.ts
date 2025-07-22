@@ -3,26 +3,10 @@ import {
   text,
   timestamp,
   boolean,
-  uuid,
+  integer,
 } from "drizzle-orm/pg-core";
 
-export const post = pgTable("posts", {
-  id: text("id").primaryKey(),
-  title: text("title").notNull(),
-  image: text("image"),
-  content: text("content").notNull(),
-  userId: text("user_id") // <-- Change from text to uuid
-    .notNull()
-    .references(() => user.id, { onDelete: "cascade" }),
-  createdAt: timestamp("created_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$defaultFn(() => /* @__PURE__ */ new Date())
-    .notNull(),
-});
-
-export const user = pgTable("users", {
+export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
@@ -38,7 +22,7 @@ export const user = pgTable("users", {
     .notNull(),
 });
 
-export const session = pgTable("sessions", {
+export const session = pgTable("session", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
@@ -51,7 +35,7 @@ export const session = pgTable("sessions", {
     .references(() => user.id, { onDelete: "cascade" }),
 });
 
-export const account = pgTable("accounts", {
+export const account = pgTable("account", {
   id: text("id").primaryKey(),
   accountId: text("account_id").notNull(),
   providerId: text("provider_id").notNull(),
@@ -69,7 +53,7 @@ export const account = pgTable("accounts", {
   updatedAt: timestamp("updated_at").notNull(),
 });
 
-export const verification = pgTable("verifications", {
+export const verification = pgTable("verification", {
   id: text("id").primaryKey(),
   identifier: text("identifier").notNull(),
   value: text("value").notNull(),
