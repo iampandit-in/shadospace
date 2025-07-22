@@ -23,7 +23,7 @@ export default async function Header() {
       <div className='max-w-7xl flex items-center justify-between p-5 mx-auto'>
         <Link href={"/"}>
           <div className='flex items-center gap-2'>
-            <Image src={"/logo.jpg"} alt="DevLogs" width={32} height={32} className='rounded-sm' />
+            <Image src={"/logo.png"} alt="Shadospace" width={32} height={32} className='invert' />
             <h1 className='text-2xl font-medium'>Shadospace</h1>
           </div>
         </Link>
