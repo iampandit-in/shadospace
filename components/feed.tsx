@@ -20,7 +20,7 @@ export default async function Feed() {
     .orderBy(desc(post.createdAt));
 
   return (
-    <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-4 gap-4">
+    <div className="grid col-span-1 md:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-4">
       {data.map((a) => (
         <div key={a.posts.id} className="mt-4 grid-cols-2">
           <Link href={`/post/${a.posts.id}`}>
@@ -29,7 +29,7 @@ export default async function Feed() {
               alt={a.posts.title}
               width={1000}
               quality={100}
-              className="rounded-md w-full"
+              className="rounded-md w-full object-cover"
               height={1000}
             />
             <div className="flex items-center gap-2 mt-2">

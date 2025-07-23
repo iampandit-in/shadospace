@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sheet"
 import { auth } from "../lib/auth";
 import { headers } from "next/headers";
+import { ModeToggle } from './mode-toggle'
 
 export default async function Header() {
   const session = await auth.api.getSession({
@@ -23,7 +24,7 @@ export default async function Header() {
       <div className='max-w-7xl flex items-center justify-between p-5 mx-auto'>
         <Link href={"/"}>
           <div className='flex items-center gap-2'>
-            <Image src={"/logo.png"} alt="Shadospace" width={32} height={32} className='invert' />
+            <Image src={"/logo.png"} alt="Shadospace" width={32} height={32} className='dark:invert' />
             <h1 className='text-2xl font-medium'>Shadospace</h1>
           </div>
         </Link>
@@ -72,6 +73,7 @@ export default async function Header() {
               <Link href={"/new"}>
                 <Button className='cursor-pointer' variant={"outline"}>Create</Button>
               </Link>
+              <ModeToggle/>
               <Link href={"/profile"}>
                 <Image
                   src={session.user.image || "/default-avatar.png"}
@@ -88,6 +90,7 @@ export default async function Header() {
             <Link href={"/register"}>
               <Button variant={"outline"} className='cursor-pointer'>Sign In</Button>
             </Link>
+            <ModeToggle/>
           </div>
         )}
       </div>

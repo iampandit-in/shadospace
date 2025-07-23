@@ -4,7 +4,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 import { auth } from "../../lib/auth"; // path to your Better Auth server instance
 import { headers } from "next/headers";
-import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
 import SignOutButton from "@/components/signout-button";
 
