@@ -6,6 +6,9 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import DOMPurify from 'isomorphic-dompurify';
+
+
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
@@ -19,14 +22,16 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
       {data.map((a) => (
         <div key={a.posts.id} className="mt-2 grid-cols-2">
           <h1 className="text-lg md:text-2xl font-bold my-2">{a.posts.title}</h1>
-          <Image
-            src={a.posts.image || ""}
-            alt={a.posts.title}
-            width={1000}
-            quality={100}
-            className="rounded-md w-full h-44 md:h-66 object-cover"
-            height={1000}
-          />
+          {a.posts.image && (
+            <Image
+              src={a.posts.image}
+              alt={a.posts.title}
+              width={1000}
+              quality={100}
+              className="rounded-md w-full h-44 md:h-66 object-cover"
+              height={1000}
+            />
+          )}
           <div className="flex items-center gap-2 mt-4">
             <Avatar>
               <AvatarImage
@@ -41,7 +46,10 @@ export default async function Post({ params }: { params: Promise<{ id: string }>
               <p className="text-sm text-foreground/70">{timeAgo.format(new Date(a.posts.createdAt))}</p>
             </span>
           </div>
-          <p className="mt-4">{a.posts.content}</p>
+          <div
+            className="prose prose-neutral dark:prose-invert max-w-none mt-4"
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(a.posts.content || '') }}
+          />
         </div>
       ))}
     </div>

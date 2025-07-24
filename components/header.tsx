@@ -92,7 +92,9 @@ export default async function Header() {
             <Link href={"/register"}>
               <Button variant={"outline"} className='cursor-pointer'>Sign In</Button>
             </Link>
+            <div className='hidden md:flex items-center gap-2'>
             <ModeToggle/>
+            </div>
           </div>
         )}
       </div>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { post, user, } from "@/db/schema";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/card";
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
@@ -24,33 +25,63 @@ export default async function Feed() {
       {data.map((a) => (
         <div key={a.posts.id} className="mt-4 grid-cols-2">
           <Link href={`/post/${a.posts.id}`}>
-            <Image
-              src={a.posts.image || ""}
-              alt={a.posts.title}
-              width={1000}
-              quality={100}
-              className="rounded-md w-full object-cover"
-              height={1000}
-            />
-            <div className="flex items-center gap-2 mt-2">
-            <Avatar>
-              <AvatarImage
-                className="object-cover"
-                src={a.users.image || ""}
-                alt="@shadcn"
+            {a.posts.image ? (
+              <Image
+                src={a.posts.image}
+                alt={a.posts.title}
+                width={1000}
+                quality={100}
+                className="rounded-md w-full object-cover"
+                height={1000}
               />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div>
-            <h1>{a.posts.title}</h1>
-            <span className="text-xs flex gap-2">
-              <p>{a.users.name}</p>
-              <p>
-                {timeAgo.format(new Date(a.posts.createdAt))}
-              </p>
-            </span>
-            </div>
-            </div>
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{a.posts.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Avatar>
+                      <AvatarImage
+                        className="object-cover"
+                        src={a.users.image || ""}
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <span className="text-xs flex gap-2">
+                        <p>{a.users.name}</p>
+                        <p>
+                          {timeAgo.format(new Date(a.posts.createdAt))}
+                        </p>
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            {a.posts.image && (
+              <div className="flex items-center gap-2 mt-2">
+                <Avatar>
+                  <AvatarImage
+                    className="object-cover"
+                    src={a.users.image || ""}
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h1>{a.posts.title}</h1>
+                  <span className="text-xs flex gap-2">
+                    <p>{a.users.name}</p>
+                    <p>
+                      {timeAgo.format(new Date(a.posts.createdAt))}
+                    </p>
+                  </span>
+                </div>
+              </div>
+            )}
           </Link>
         </div>
       ))}

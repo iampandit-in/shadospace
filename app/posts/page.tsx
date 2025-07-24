@@ -5,6 +5,7 @@ import { desc, eq } from "drizzle-orm";
 import Image from "next/image";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import DOMPurify from 'dompurify';
 
 export default async function Posts() {
   const data = await db
@@ -20,18 +21,23 @@ export default async function Posts() {
           <Card>
             <CardHeader>
               <CardTitle>{a.posts.title}</CardTitle>
-              <CardDescription>{a.posts.content}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Image
-                src={a.posts.image || ""}
-                alt={a.posts.title}
-                width={1000}
-                quality={100}
-                className="rounded-md w-full"
-                height={1000}
+              <div
+                className="prose prose-neutral dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(a.posts.content || '') }}
               />
-            </CardContent>
+            </CardHeader>
+            {a.posts.image && (
+              <CardContent>
+                <Image
+                  src={a.posts.image}
+                  alt={a.posts.title}
+                  width={1000}
+                  quality={100}
+                  className="rounded-md w-full"
+                  height={1000}
+                />
+              </CardContent>
+            )}
             <CardFooter>
               <CardDescription className="flex items-center gap-2">
                 <Avatar>
