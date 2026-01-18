@@ -38,8 +38,11 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-40">
               <DropdownMenuItem>Python</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>DSA</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>MERN</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>PERN</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -51,8 +54,11 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-60">
               <DropdownMenuItem>Python</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>React + MongoDB</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>React + Firebase</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>React + NEXT + PostgreSQL</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -65,6 +71,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-60">
               <DropdownMenuItem>Python</DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>DSA</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
