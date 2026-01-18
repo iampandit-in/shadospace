@@ -1,7 +1,14 @@
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <h1>Shadospace</h1>
-    </div>
-  );
+import LandingPage from "@/components/pages/landing";
+import { auth } from "@/lib/auth";
+import Home from "@/components/pages/home";
+import { headers } from "next/headers";
+
+export default async function Page() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (session?.user) {
+    return <Home />;
+  }
+  return <LandingPage />;
 }
