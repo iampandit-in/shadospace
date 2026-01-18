@@ -21,7 +21,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }) => {
       await resend.emails.send({
-        from: "shadospace <onboarding@resend.dev>", // Use Resend sandbox (or your verified domain)
+        from: "shadospace.in", // Use Resend sandbox (or your verified domain)
         to: user.email!,
         subject: "Verify your email address",
         react: EmailVerification({ user: user.email!, url, token }),
