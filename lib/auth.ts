@@ -21,7 +21,7 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }) => {
       await resend.emails.send({
-        from: "shadospace.in", // Use Resend sandbox (or your verified domain)
+        from: "email@shadospace.in", // Use Resend sandbox (or your verified domain)
         to: user.email!,
         subject: "Verify your email address",
         react: EmailVerification({ user: user.email!, url, token }),
@@ -36,6 +36,11 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
+  },
+  account: {
+    accountLinking: {
+      enabled: true,
     },
   },
   plugins: [nextCookies()],

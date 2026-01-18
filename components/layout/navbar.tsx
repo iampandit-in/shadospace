@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
@@ -25,8 +26,8 @@ export default function Navbar() {
     <header className="border-b">
       <div className="flex items-center justify-between gap-4 py-4 px-8">
         <Link href={"/"} className="flex items-center gap-2">
-          <Image src={"/shadospace.png"} alt="logo" width={30} height={30} />
-          <h1 className="text-2xl">shadospace</h1>
+          <Image src={"/shadospace.png"} alt="logo" width={28} height={28} />
+          <h1 className="text-xl">shadospace</h1>
         </Link>
         <div className="flex items-center gap-4">
           <DropdownMenu>
@@ -73,11 +74,8 @@ export default function Navbar() {
             <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    size={"icon"}
-                    className="flex items-center gap-1"
-                    variant={"link"}
-                  >
+                  <div className="flex items-center gap-3 cursor-pointer">
+                    <p className="cursor-pointer">{session.user.email}</p>
                     <Image
                       src={session.user.image || ""}
                       alt="profile"
@@ -85,13 +83,16 @@ export default function Navbar() {
                       height={30}
                       className="rounded-full"
                     />
-                  </Button>
+                  </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-40">
+                <DropdownMenuContent align="end">
                   <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Button
+                      className="w-full cursor-pointer"
                       variant={"destructive"}
                       onClick={() =>
                         authClient.signOut({
@@ -111,12 +112,12 @@ export default function Navbar() {
               </DropdownMenu>
             </div>
           ) : (
-            <div>
-              <Button variant={"link"} asChild>
-                <Link href={"/signin"}>Sign In</Link>
+            <div className="flex items-center gap-2">
+              <Button variant={"outline"} asChild>
+                <Link href={"/signin"}>SignIn</Link>
               </Button>
-              <Button variant={"link"} asChild>
-                <Link href={"/signup"}>Sign Up</Link>
+              <Button variant={"outline"} asChild>
+                <Link href={"/signup"}>SignUp</Link>
               </Button>
             </div>
           )}

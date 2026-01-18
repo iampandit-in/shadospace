@@ -51,7 +51,7 @@ const EmailVerification = ({ user, url, token }: EmailVerificationProps) => {
               {/* CTA Button */}
               <Section className="text-center mb-[24px]">
                 <Button
-                  href={`${url}?user=${user}&token=${token}`}
+                  href={url}
                   className="bg-red-400 text-white px-[32px] py-[16px] rounded-[8px] text-[16px] font-semibold no-underline box-border"
                 >
                   Verify Email Address

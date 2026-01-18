@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shadospace",
+  title: "shadospace",
   description: "a all in one platform for all of your needs",
 };
 

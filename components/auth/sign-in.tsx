@@ -87,7 +87,7 @@ export default function SignIn() {
         >
           <Button
             variant="outline"
-            className="w-full gap-2"
+            className="w-full gap-2 cursor-pointer"
             disabled={loading}
             onClick={async () => {
               await signIn.social({
@@ -119,7 +119,7 @@ export default function SignIn() {
           </Button>
           <Button
             variant="outline"
-            className="w-full gap-2"
+            className="w-full gap-2 cursor-pointer"
             disabled={loading}
             onClick={async () => {
               await signIn.social({
