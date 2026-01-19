@@ -40,7 +40,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className="mx-8 my-4">{children}</main>
+          <main className="mx-4 md:mx-8 my-4">{children}</main>
           <Toaster richColors />
         </ThemeProvider>
         <SpeedInsights />

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +11,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
@@ -18,18 +26,103 @@ export default function Navbar() {
   const router = useRouter();
   const {
     data: session,
-    isPending, //loading state
-    error, //error object
     refetch, //refetch the session
   } = authClient.useSession();
   return (
     <header className="border-b">
-      <div className="flex items-center justify-between gap-4 py-4 px-8">
-        <Link href={"/"} className="flex items-center gap-2">
-          <Image src={"/shadospace.png"} alt="logo" width={28} height={28} />
-          <h1 className="text-xl">shadospace</h1>
-        </Link>
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between gap-4 py-4 px-4 md:px-8">
+        <div className="flex items-center gap-2">
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button size={"icon"} variant={"outline"}>
+                  <Menu />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <SheetHeader>
+                  <SheetTitle>Menu</SheetTitle>
+                  <SheetDescription>
+                    all the links and options are here
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="flex flex-col gap-2 items-center justify-center h-full">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant={"link"}
+                        className="flex items-center gap-1"
+                      >
+                        Tutorials <ChevronDown size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="min-w-40">
+                      <DropdownMenuItem>
+                        <Link href={"/tutorials/python"}>Python</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>DSA</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>MERN</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>PERN</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant={"link"}
+                        className="flex items-center gap-1"
+                      >
+                        Projects <ChevronDown size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="min-w-60">
+                      <DropdownMenuItem>
+                        <Link href={"/projects/python"}>Python</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link href={"/projects/react"}>React</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link href={"/projects/react"}>React + Firebase</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>
+                        <Link href={"/projects/react"}>
+                          React + NEXT + PostgreSQL
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        className="flex items-center gap-1"
+                        variant={"link"}
+                      >
+                        Practice <ChevronDown size={16} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="min-w-60">
+                      <DropdownMenuItem>Python</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>DSA</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+          <Link href={"/"} className="flex items-center gap-2">
+            <Image src={"/shadospace.png"} alt="logo" width={28} height={28} />
+            <h1 className="text-xl">shadospace</h1>
+          </Link>
+        </div>
+        <div className="items-center gap-4 hidden md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"link"} className="flex items-center gap-1">
@@ -37,7 +130,9 @@ export default function Navbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-40">
-              <DropdownMenuItem>Python</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/tutorials/python"}>Python</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>DSA</DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -53,13 +148,21 @@ export default function Navbar() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-60">
-              <DropdownMenuItem>Python</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/projects/python"}>Python</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>React + MongoDB</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/projects/react"}>React</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>React + Firebase</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/projects/react"}>React + Firebase</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>React + NEXT + PostgreSQL</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/projects/react"}>React + NEXT + PostgreSQL</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -82,7 +185,9 @@ export default function Navbar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 cursor-pointer">
-                    <p className="cursor-pointer">{session.user.email}</p>
+                    <p className="cursor-pointer hidden md:block">
+                      {session.user.email}
+                    </p>
                     <Image
                       src={session.user.image || ""}
                       alt="profile"
@@ -93,9 +198,17 @@ export default function Navbar() {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={"/dashboard"}>Dashboard</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={"/profile"}>Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href={"/settings"}>Settings</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <Button
@@ -123,7 +236,7 @@ export default function Navbar() {
               <Button variant={"outline"} asChild>
                 <Link href={"/signin"}>SignIn</Link>
               </Button>
-              <Button variant={"outline"} asChild>
+              <Button className="hidden md:block" variant={"outline"} asChild>
                 <Link href={"/signup"}>SignUp</Link>
               </Button>
             </div>
