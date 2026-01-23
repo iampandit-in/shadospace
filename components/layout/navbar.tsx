@@ -181,13 +181,17 @@ export default function Navbar() {
         </div>
         <div className="flex items-center gap-2">
           {session?.user ? (
-            <div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={"outline"}
+                className="px-2 py-1 cursor-pointer"
+                asChild
+              >
+                <Link href={"/create/post"}>Create</Link>
+              </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-3 cursor-pointer">
-                    <p className="cursor-pointer hidden md:block">
-                      {session.user.email}
-                    </p>
                     <Image
                       src={session.user.image || ""}
                       alt="profile"
@@ -236,7 +240,7 @@ export default function Navbar() {
               <Button variant={"outline"} asChild>
                 <Link href={"/signin"}>SignIn</Link>
               </Button>
-              <Button className="hidden md:block" variant={"outline"} asChild>
+              <Button className="hidden md:flex" variant={"outline"} asChild>
                 <Link href={"/signup"}>SignUp</Link>
               </Button>
             </div>
