@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Edit2, Trash2, Plus, ExternalLink, Loader2 } from "lucide-react";
+import { Edit2, Trash2, Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
 
@@ -36,8 +36,10 @@ export default function DashboardPage() {
       if (!response.ok) throw new Error("Failed to fetch posts");
       const data = await response.json();
       // Filter posts for the current user (the API returns all for simplicity in this demo, but typically would filter by user)
-      setPosts(data.filter((p: any) => p.userId === session?.user.id));
-    } catch (error) {
+      setPosts(
+        data.filter((p: { userId: string }) => p.userId === session?.user.id),
+      );
+    } catch {
       toast.error("Failed to load posts");
     } finally {
       setIsLoading(false);
