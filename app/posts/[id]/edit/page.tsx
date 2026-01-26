@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
@@ -41,11 +41,14 @@ const formSchema = z.object({
   category: z.enum(["tutorial", "project", "practice"]),
 });
 
-export default function CreatePostPage() {
+export default function EditPostPage() {
   const { data: session } = authClient.useSession();
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,15 +61,48 @@ export default function CreatePostPage() {
     },
   });
 
+  React.useEffect(() => {
+    async function fetchPost() {
+      try {
+        const response = await fetch(`/api/posts/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch post");
+        const post = await response.json();
+
+        form.reset({
+          title: post.title,
+          content: post.content,
+          image: post.image || "",
+          status: post.status,
+          category: post.category,
+        });
+        if (post.image) setImagePreview(post.image);
+      } catch (error) {
+        toast.error("Failed to load post");
+        router.push("/dashboard");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (id) fetchPost();
+  }, [id, form, router]);
+
   if (!session) {
     return router.push("/signin");
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
   }
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const response = await fetch("/api/posts", {
-        method: "POST",
+      const response = await fetch(`/api/posts/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -76,11 +112,11 @@ export default function CreatePostPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Failed to create post");
+        throw new Error(result.error || "Failed to update post");
       }
 
-      toast.success("Post created successfully!");
-      router.push("/");
+      toast.success("Post updated successfully!");
+      router.push("/dashboard");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "An unknown error occurred";
@@ -104,8 +140,12 @@ export default function CreatePostPage() {
   };
 
   return (
-    <div className="max-w-lg mx-auto">
-      <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
+    <div className="max-w-lg mx-auto py-10">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Edit Post</h1>
+        <p className="text-muted-foreground">Modify your post details.</p>
+      </div>
+      <form id="edit-post-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <div className="space-y-2">
             <FieldLabel>Cover Image</FieldLabel>
@@ -149,10 +189,10 @@ export default function CreatePostPage() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="form-rhf-demo-title">Title</FieldLabel>
+                <FieldLabel htmlFor="post-title">Title</FieldLabel>
                 <Input
                   {...field}
-                  id="form-rhf-demo-title"
+                  id="post-title"
                   aria-invalid={fieldState.invalid}
                   placeholder="Title"
                   autoComplete="off"
@@ -188,10 +228,7 @@ export default function CreatePostPage() {
               render={({ field }) => (
                 <Field>
                   <FieldLabel>Status</FieldLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
@@ -210,10 +247,7 @@ export default function CreatePostPage() {
               render={({ field }) => (
                 <Field>
                   <FieldLabel>Category</FieldLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
@@ -229,29 +263,26 @@ export default function CreatePostPage() {
           </div>
         </FieldGroup>
       </form>
-      <Field orientation="horizontal" className="mt-4">
+      <div className="flex gap-4 mt-8">
         <Button
           className="w-1/2 cursor-pointer"
           type="button"
           variant="outline"
-          onClick={() => {
-            form.reset();
-            setImagePreview(null);
-          }}
+          onClick={() => router.push("/dashboard")}
           disabled={isSubmitting}
         >
-          Reset
+          Cancel
         </Button>
         <Button
           className="w-1/2 cursor-pointer"
           type="submit"
-          form="form-rhf-demo"
+          form="edit-post-form"
           disabled={isSubmitting}
         >
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isSubmitting ? "Creating..." : "Post"}
+          {isSubmitting ? "Updating..." : "Update Post"}
         </Button>
-      </Field>
+      </div>
     </div>
   );
 }

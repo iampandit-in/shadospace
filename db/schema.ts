@@ -43,7 +43,12 @@ export const post = pgTable(
       .$onUpdate(() => /* @__PURE__ */ new Date())
       .notNull(),
   },
-  (table) => [index("post_userId_idx").on(table.userId)],
+  (table) => [
+    index("post_userId_idx").on(table.userId),
+    index("post_status_idx").on(table.status),
+    index("post_category_idx").on(table.category),
+    index("post_createdAt_idx").on(table.createdAt),
+  ],
 );
 
 export const comment = pgTable(
