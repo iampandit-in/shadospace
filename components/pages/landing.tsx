@@ -1,35 +1,22 @@
-import React from "react";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 
-export default function LandingPage() {
+export default function Landing() {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 h-[calc(100vh-12rem)]">
-      <h1 className="md:text-5xl text-3xl font-bold max-w-4xl text-center">
-        All in one platform for all of your needs
-      </h1>
-      <p className="md:text-lg text-base max-w-xl text-center md:my-4 my-2">
-        Learn, practice, and build projects with our comprehensive platform
-      </p>
-      <div className="flex items-center gap-2">
-        <Button
-          className="px-5 py-4 cursor-pointer"
-          size={"lg"}
-          variant={"default"}
-          asChild
-        >
-          <Link href={"/signin"}>
-            Get Started <ChevronRight />
-          </Link>
-        </Button>
-        <Button
-          className="px-5 py-4 cursor-pointer"
-          size={"lg"}
-          variant={"outline"}
-        >
-          Learn More
-        </Button>
+    <div className="h-[calc(100vh-12rem)] flex items-center justify-center">
+      <div className="text-center space-y-4">
+        <h1 className="text-4xl md:text-6xl font-bold">
+          stop tab-switching. start mastering.
+        </h1>
+        <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+          the only platform that merges comprehensive documentation, deep-dive
+          tutorials, and competitive coding challenges into one seamless
+          workflow.
+        </p>
+        <div className="mt-8">
+          <Button size={"lg"} className="cursor-pointer">
+            Start Coding for Free
+          </Button>
+        </div>
       </div>
     </div>
   );

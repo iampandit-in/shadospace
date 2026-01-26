@@ -1,96 +1,12 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
 
-export const post = pgTable(
-  "post",
-  {
-    id: text("id").primaryKey(),
-    title: text("title").notNull(),
-    content: text("content").notNull(),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    image: text("image"),
-
-    status: text("status", {
-      enum: [
-        "draft",
-        "published",
-        "deleted",
-        "archived",
-        "scheduled",
-        "in review",
-      ],
-    })
-      .default("draft")
-      .notNull(),
-    category: text("category", {
-      enum: ["tutorial", "project", "practice"],
-    })
-      .default("tutorial")
-      .notNull(),
-    scheduledAt: timestamp("scheduled_at"),
-    scheduledBy: text("scheduled_by").references(() => user.id, {
-      onDelete: "cascade",
-    }),
-    scheduledReason: text("scheduled_reason"),
-    likes: text("likes").array(),
-    views: text("views").array(),
-
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-  },
-  (table) => [
-    index("post_userId_idx").on(table.userId),
-    index("post_status_idx").on(table.status),
-    index("post_category_idx").on(table.category),
-    index("post_createdAt_idx").on(table.createdAt),
-  ],
-);
-
-export const comment = pgTable(
-  "comment",
-  {
-    id: text("id").primaryKey(),
-    postId: text("post_id")
-      .notNull()
-      .references(() => post.id, { onDelete: "cascade" }),
-    userId: text("user_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "cascade" }),
-    content: text("content").notNull(),
-    likes: text("likes").array(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
-      .defaultNow()
-      .$onUpdate(() => /* @__PURE__ */ new Date())
-      .notNull(),
-  },
-  (table) => [
-    index("comment_postId_idx").on(table.postId),
-    index("comment_userId_idx").on(table.userId),
-  ],
-);
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  image: text("image"),
-  bio: text("bio"),
-  location: text("location"),
-  website: text("website"),
-  github: text("github"),
-  twitter: text("twitter"),
   emailVerified: boolean("email_verified").default(false).notNull(),
-  role: text("role", {
-    enum: ["user", "admin", "moderator"],
-  })
-    .default("user")
-    .notNull(),
+  image: text("image"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -160,8 +76,6 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
-  posts: many(post),
-  comments: many(comment),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -174,30 +88,6 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
-    references: [user.id],
-  }),
-}));
-export const postRelations = relations(post, ({ one, many }) => ({
-  author: one(user, {
-    fields: [post.userId],
-    references: [user.id],
-    relationName: "author",
-  }),
-  scheduledBy: one(user, {
-    fields: [post.scheduledBy],
-    references: [user.id],
-    relationName: "scheduler",
-  }),
-  comments: many(comment),
-}));
-
-export const commentRelations = relations(comment, ({ one }) => ({
-  post: one(post, {
-    fields: [comment.postId],
-    references: [post.id],
-  }),
-  author: one(user, {
-    fields: [comment.userId],
     references: [user.id],
   }),
 }));

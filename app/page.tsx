@@ -1,14 +1,9 @@
-import LandingPage from "@/components/pages/landing";
-import { auth } from "@/lib/auth";
-import Home from "@/components/pages/home";
-import { headers } from "next/headers";
+import Landing from "@/components/pages/landing";
 
-export default async function Page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  if (session?.user) {
-    return <Home />;
-  }
-  return <LandingPage />;
+export default function Home() {
+  return (
+    <div>
+      <Landing />
+    </div>
+  );
 }
