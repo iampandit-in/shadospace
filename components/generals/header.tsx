@@ -4,6 +4,13 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 export default async function Header() {
   const session = await auth.api.getSession({
@@ -24,30 +31,55 @@ export default async function Header() {
         <nav className="flex items-center gap-2">
           {session ? (
             <nav className="flex items-center gap-2">
-              <Image
-                className="rounded-full"
-                src={session.user.image || "/avatar.png"}
-                alt="shadospace"
-                height={36}
-                width={36}
-              />
-              <form
-                action={async () => {
-                  "use server";
-                  await auth.api.signOut({
-                    headers: await headers(),
-                  });
-                  revalidatePath("/");
-                }}
-              >
-                <Button
-                  type="submit"
-                  className="cursor-pointer"
-                  variant={"destructive"}
-                >
-                  Sign Out
-                </Button>
-              </form>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="flex items-center gap-2">
+                    <Image
+                      className="rounded-full"
+                      src={session.user.image || "/avatar.png"}
+                      alt="shadospace"
+                      height={36}
+                      width={36}
+                    />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Link href={"/profile"}>profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link href={"/dashboard"}>dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <div>
+                      <Button
+                        variant={"outline"}
+                        className="cursor-pointer"
+                        asChild
+                      ></Button>
+                      <form
+                        action={async () => {
+                          "use server";
+                          await auth.api.signOut({
+                            headers: await headers(),
+                          });
+                          revalidatePath("/");
+                        }}
+                      >
+                        <Button
+                          type="submit"
+                          className="cursor-pointer"
+                          variant={"destructive"}
+                        >
+                          Sign Out
+                        </Button>
+                      </form>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
           ) : (
             <div className="flex items-center gap-2">
