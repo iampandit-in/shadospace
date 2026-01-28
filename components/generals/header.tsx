@@ -19,7 +19,7 @@ export default async function Header() {
   return (
     <header className="border-b">
       <div className="max-w-5xl mx-auto p-4 flex justify-between">
-        <div className="flex items-center gap-2">
+        <Link href={"/"} className="flex items-center gap-2">
           <Image
             src={"/shadospace.png"}
             alt="shadospace"
@@ -27,7 +27,7 @@ export default async function Header() {
             width={36}
           />
           <h1 className="text-2xl font-medium">shadospace</h1>
-        </div>
+        </Link>
         <nav className="flex items-center gap-2">
           {session ? (
             <nav className="flex items-center gap-2">
@@ -35,7 +35,7 @@ export default async function Header() {
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center gap-2">
                     <Image
-                      className="rounded-full"
+                      className="rounded-full cursor-pointer"
                       src={session.user.image || "/avatar.png"}
                       alt="shadospace"
                       height={36}
@@ -45,11 +45,11 @@ export default async function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
-                    <Link href={"/profile"}>profile</Link>
+                    <Link href={"/dashboard"}>dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Link href={"/dashboard"}>dashboard</Link>
+                    <Link href={"/settings"}>settings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>

@@ -12,9 +12,12 @@ export default function Landing() {
           tutorials, and competitive coding challenges into one seamless
           workflow.
         </p>
-        <div className="mt-8">
+        <div className="mt-8 flex items-center gap-2 justify-center">
           <Button size={"lg"} className="cursor-pointer">
             Start Coding for Free
+          </Button>
+          <Button size={"lg"} variant={"outline"} className="cursor-pointer">
+            Learn more
           </Button>
         </div>
       </div>
