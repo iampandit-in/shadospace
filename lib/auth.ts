@@ -3,6 +3,10 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; // your drizzle instance
 import { schema } from "@/db/schema";
 import { nextCookies } from "better-auth/next-js";
+import { Resend } from "resend";
+import { VerifyEmail } from "@/components/auth/verify-email";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -11,6 +15,18 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      await resend.emails.send({
+        from: "shadospace <onboarding@shadospace.in>",
+        to: [user.email],
+        subject: "Verify your email address",
+        react: VerifyEmail({ name: user.name, url: url }),
+      });
+    },
+    sendOnSignUp: true,
+    sendOnPasswordReset: true,
   },
   socialProviders: {
     github: {

@@ -75,22 +75,22 @@ export default function SignIn() {
 
   return (
     <div className="w-full sm:max-w-md mx-auto mt-20 flex flex-col gap-4">
-      <CardTitle className="flex items-center mb-4 text-lg gap-2">
+      <div className="flex flex-col items-center justify-center mb-4 gap-2">
         <Image
           src={"/shadospace.png"}
           alt="shadospace"
-          height={30}
-          width={30}
+          height={40}
+          width={40}
         />
-        Sign In
-      </CardTitle>
+        <p className="text-lg font-medium">sign in to your account</p>
+      </div>
       <form id="form-rhf-input" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Controller
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="-mt-4">
                 <FieldLabel htmlFor="form-rhf-input-email">email</FieldLabel>
                 <Input
                   {...field}
@@ -109,7 +109,7 @@ export default function SignIn() {
             name="password"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="-mt-4">
                 <FieldLabel htmlFor="form-rhf-input-password">
                   password
                 </FieldLabel>
@@ -121,6 +121,9 @@ export default function SignIn() {
                     aria-invalid={fieldState.invalid}
                   />
                 </InputGroup>
+                <Link href="/auth/reset-password" className="text-sm">
+                  Forgot password?
+                </Link>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -143,7 +146,10 @@ export default function SignIn() {
         </Button>
         <SocialAuthButtons />
       </div>
-      <Link href="/signup">Don&apos;t have an account? Sign up</Link>
+      <Link className="text-center mt-4" href="/signup">
+        Don&apos;t have an account?{" "}
+        <span className="text-red-400 hover:underline">sign up</span>
+      </Link>
     </div>
   );
 }

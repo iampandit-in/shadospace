@@ -11,6 +11,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default async function Header() {
   const session = await auth.api.getSession({
@@ -33,15 +35,17 @@ export default async function Header() {
             <nav className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div className="flex items-center gap-2">
-                    <Image
-                      className="rounded-full cursor-pointer"
-                      src={session.user.image || "/avatar.png"}
-                      alt="shadospace"
-                      height={36}
-                      width={36}
-                    />
-                  </div>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <Avatar>
+                      <AvatarImage
+                        src={session.user.image || "/avatar.png"}
+                        alt="shadospace"
+                      />
+                      <AvatarFallback>
+                        {session.user.name.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>
@@ -54,11 +58,6 @@ export default async function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
                     <div>
-                      <Button
-                        variant={"outline"}
-                        className="cursor-pointer"
-                        asChild
-                      ></Button>
                       <form
                         action={async () => {
                           "use server";
@@ -66,6 +65,7 @@ export default async function Header() {
                             headers: await headers(),
                           });
                           revalidatePath("/");
+                          redirect("/signin");
                         }}
                       >
                         <Button

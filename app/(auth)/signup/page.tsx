@@ -120,7 +120,9 @@ export default function SignUp() {
           setLoading(false);
         },
         onSuccess: () => {
-          toast.success("Sign up successfully");
+          toast.success("Sign up successfully", {
+            description: "Please check your email for verification.",
+          });
           router.push("/");
           router.refresh();
         },
@@ -133,14 +135,14 @@ export default function SignUp() {
 
   return (
     <div className="w-full sm:max-w-md mx-auto flex flex-col gap-4">
-      <div className="flex text-lg items-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2">
         <Image
           src={"/shadospace.png"}
           alt="shadospace"
-          height={30}
-          width={30}
+          height={40}
+          width={40}
         />
-        <p>Sign Up</p>
+        <p className="text-lg font-medium">create your account</p>
       </div>
       <form id="form-rhf-input" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
@@ -236,7 +238,7 @@ export default function SignUp() {
             name="name"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="-mt-4">
                 <FieldLabel htmlFor="form-rhf-input-name">name</FieldLabel>
                 <Input
                   {...field}
@@ -255,7 +257,7 @@ export default function SignUp() {
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="-mt-4">
                 <FieldLabel htmlFor="form-rhf-input-email">email</FieldLabel>
                 <Input
                   {...field}
@@ -274,7 +276,7 @@ export default function SignUp() {
             name="password"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field data-invalid={fieldState.invalid} className="-mt-4">
                 <FieldLabel htmlFor="form-rhf-input-password">
                   password
                 </FieldLabel>
@@ -302,7 +304,10 @@ export default function SignUp() {
           form="form-rhf-input"
         >
           {loading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <div className="flex items-center gap-2">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              creating your account...
+            </div>
           ) : (
             "Sign Up"
           )}
@@ -310,8 +315,9 @@ export default function SignUp() {
         <SocialAuthButtons />
       </div>
 
-      <Link className="" href="/signin">
-        already have an account? sign in
+      <Link className="text-center mt-4" href="/signin">
+        already have an account?{" "}
+        <span className="text-red-400 hover:underline">sign in</span>
       </Link>
     </div>
   );
