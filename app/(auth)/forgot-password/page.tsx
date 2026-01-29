@@ -13,38 +13,30 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { InputGroup } from "@/components/ui/input-group";
 import Link from "next/link";
 import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-import { SocialAuthButtons } from "@/components/utils/social-auth-buttons";
-import { useRouter } from "next/navigation";
-
 const formSchema = z.object({
   email: z.email("Invalid email address."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
 });
 
-export default function SignIn() {
-  const router = useRouter();
+export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await authClient.signIn.email(
+    await authClient.requestPasswordReset(
       {
         email: data.email,
-        password: data.password,
-        callbackURL: "/",
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password`,
       },
       {
         onRequest: () => {
@@ -54,9 +46,7 @@ export default function SignIn() {
           setLoading(false);
         },
         onSuccess: () => {
-          toast.success("Sign in successfully");
-          router.push("/");
-          router.refresh();
+          toast.success("please check your email");
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
@@ -74,7 +64,7 @@ export default function SignIn() {
           height={40}
           width={40}
         />
-        <p className="text-lg font-medium">sign in to your account</p>
+        <p className="text-lg font-medium">forgot your password?</p>
       </div>
       <form id="form-rhf-input" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
@@ -97,31 +87,6 @@ export default function SignIn() {
               </Field>
             )}
           />
-          <Controller
-            name="password"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="-mt-4">
-                <FieldLabel htmlFor="form-rhf-input-password">
-                  password
-                </FieldLabel>
-                <InputGroup>
-                  <Input
-                    {...field}
-                    id="form-rhf-input-password"
-                    placeholder="********"
-                    aria-invalid={fieldState.invalid}
-                  />
-                </InputGroup>
-                <Link href="/forgot-password" className="text-sm">
-                  Forgot password?
-                </Link>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
         </FieldGroup>
       </form>
       <div className="flex flex-col gap-4">
@@ -131,12 +96,14 @@ export default function SignIn() {
           form="form-rhf-input"
         >
           {loading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            <div className="flex items-center gap-2">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <p>sending email...</p>
+            </div>
           ) : (
-            "Sign In"
+            "send email"
           )}
         </Button>
-        <SocialAuthButtons />
       </div>
       <Link className="text-center mt-4" href="/signup">
         Don&apos;t have an account?{" "}

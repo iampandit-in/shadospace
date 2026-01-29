@@ -20,7 +20,7 @@ import { Camera, Loader2, UserCircle, X } from "lucide-react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
-import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
+import { SocialAuthButtons } from "@/components/utils/social-auth-buttons";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({

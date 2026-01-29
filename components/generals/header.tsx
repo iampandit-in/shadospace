@@ -38,7 +38,7 @@ export default async function Header() {
                   <Button variant="ghost" size="icon" className="rounded-full">
                     <Avatar>
                       <AvatarImage
-                        src={session.user.image || "/avatar.png"}
+                        src={session.user.image || ""}
                         alt="shadospace"
                       />
                       <AvatarFallback>
