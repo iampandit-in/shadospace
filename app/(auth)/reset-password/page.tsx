@@ -21,7 +21,7 @@ import Image from "next/image";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 const formSchema = z
   .object({
@@ -35,7 +35,7 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
-export default function ResetPassword() {
+function ResetPasswordForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +69,7 @@ export default function ResetPassword() {
           toast.success("password reset successfully");
           router.push("/signin");
         },
-        onError: (ctx) => {
+        onError: (ctx: any) => {
           toast.error(ctx.error.message);
         },
       },
@@ -179,5 +179,20 @@ export default function ResetPassword() {
         </Button>
       </div>
     </div>
+  );
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full sm:max-w-md mx-auto flex flex-col items-center justify-center gap-4 mt-20">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        </div>
+      }
+    >
+      <ResetPasswordForm />
+    </Suspense>
   );
 }

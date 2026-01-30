@@ -2,7 +2,7 @@ import { Button } from "../ui/button";
 
 export default function Landing() {
   return (
-    <div className="h-[calc(100vh-12rem)] flex items-center justify-center">
+    <div className="max-w-5xl mx-auto p-4 h-[calc(100vh-12rem)] flex items-center justify-center">
       <div className="text-center space-y-4">
         <h1 className="text-4xl md:text-6xl font-bold">
           stop tab-switching. start mastering.

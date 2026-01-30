@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  integer,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -7,6 +14,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
+  username: text("username").unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -73,6 +81,43 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const category = pgTable("category", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const post = pgTable(
+  "post",
+  {
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    slug: text("slug").notNull().unique(),
+    content: text("content").notNull(),
+    description: text("description"),
+    image: text("image"),
+    status: text("status").default("draft").notNull(), // 'draft' | 'published'
+    authorId: text("author_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    categoryId: text("category_id").references(() => category.id, {
+      onDelete: "set null",
+    }),
+    views: integer("views").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("post_authorId_idx").on(table.authorId),
+    index("post_categoryId_idx").on(table.categoryId),
+  ],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -92,4 +137,26 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const schema = { user, session, account, verification };
+export const postRelations = relations(post, ({ one }) => ({
+  author: one(user, {
+    fields: [post.authorId],
+    references: [user.id],
+  }),
+  category: one(category, {
+    fields: [post.categoryId],
+    references: [category.id],
+  }),
+}));
+
+export const categoryRelations = relations(category, ({ many }) => ({
+  posts: many(post),
+}));
+
+export const schema = {
+  user,
+  session,
+  account,
+  verification,
+  post,
+  category,
+};
