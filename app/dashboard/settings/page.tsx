@@ -60,7 +60,7 @@ export default function SettingsPage() {
     setMounted(true);
     if (user) {
       setName(user.name || "");
-      setUsername((user as any).username || "");
+      setUsername((user as { username?: string | null }).username || "");
     }
   }, [user]);
 
@@ -78,7 +78,7 @@ export default function SettingsPage() {
       const { error } = await authClient.updateUser({
         name,
         username,
-      });
+      } as Parameters<typeof authClient.updateUser>[0] & { username?: string });
 
       if (error) throw error;
       toast.success("Profile updated successfully");
@@ -104,7 +104,7 @@ export default function SettingsPage() {
 
       if (!response.ok) throw new Error("Upload failed");
 
-      const blob = await response.json();
+      const blob = (await response.json()) as { url: string };
       const { error } = await authClient.updateUser({
         image: blob.url,
       });
