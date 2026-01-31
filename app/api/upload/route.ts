@@ -13,15 +13,18 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   try {
-    const blob = await put(filename, request.body as ReadableStream, {
+    const blob = await put(filename, request.body!, {
       access: "public",
     });
 
     return NextResponse.json(blob);
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("DEBUG: Upload error full object:", error);
     return NextResponse.json(
-      { error: "Failed to upload image" },
+      {
+        error: "Failed to upload image",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }

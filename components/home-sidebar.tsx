@@ -2,9 +2,13 @@
 
 import * as React from "react";
 import {
+  AudioWaveform,
   BookOpen,
   Bot,
+  Command,
   Frame,
+  GalleryVerticalEnd,
+  Map,
   PieChart,
   Settings2,
   SquareTerminal,
@@ -113,12 +117,14 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function HomeSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar side="left" collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>

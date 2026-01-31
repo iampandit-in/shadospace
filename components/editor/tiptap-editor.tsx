@@ -1,6 +1,12 @@
 "use client";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import {
+  useEditor,
+  EditorContent,
+  NodeViewContent,
+  NodeViewWrapper,
+  ReactNodeViewRenderer,
+} from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
@@ -16,10 +22,18 @@ import {
   Undo,
   Redo,
   Loader2,
+  Code,
+  Copy,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { all, createLowlight } from "lowlight";
+
+const lowlight = createLowlight(all);
 
 interface TiptapEditorProps {
   content: string;
@@ -47,6 +61,11 @@ export const TiptapEditor = ({
       Placeholder.configure({
         placeholder: placeholder || "Start writing your story...",
       }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        enableTabIndentation: true,
+        tabSize: 2,
+      }),
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -55,7 +74,7 @@ export const TiptapEditor = ({
     editorProps: {
       attributes: {
         class:
-          "prose prose-invert max-w-none focus:outline-none min-h-[500px] text-lg leading-relaxed",
+          "prose prose-invert max-w-none focus:outline-none min-h-[500px] text-lg leading-relaxed px-4",
       },
     },
   });
@@ -73,17 +92,26 @@ export const TiptapEditor = ({
 
       setIsUploading(true);
       try {
-        const response = await fetch(`/api/upload?filename=${file.name}`, {
-          method: "POST",
-          body: file,
-        });
+        const response = await fetch(
+          `/api/upload?filename=${encodeURIComponent(file.name)}`,
+          {
+            method: "POST",
+            body: file,
+          },
+        );
 
-        if (!response.ok) throw new Error("Upload failed");
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.details || "Upload failed");
+        }
 
         const blob = await response.json();
         editor.chain().focus().setImage({ src: blob.url }).run();
       } catch (error) {
         console.error("Upload error:", error);
+        toast.error(
+          error instanceof Error ? error.message : "Failed to upload image",
+        );
       } finally {
         setIsUploading(false);
       }
@@ -179,6 +207,17 @@ export const TiptapEditor = ({
         >
           <Quote className="h-4 w-4" />
         </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={cn(
+            "h-8 w-8 p-0",
+            editor.isActive("codeBlock") && "bg-muted text-primary",
+          )}
+        >
+          <Code className="h-4 w-4" />
+        </Button>
         <Separator orientation="vertical" className="h-4 mx-1 my-auto" />
         <Button
           variant="ghost"
@@ -227,7 +266,7 @@ const Separator = ({
   <div
     className={cn(
       "bg-border/50",
-      orientation === "vertical" ? "w-[1px] h-full" : "h-[1px] w-full",
+      orientation === "vertical" ? "w-px h-full" : "h-px w-full",
       className,
     )}
   />

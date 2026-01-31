@@ -1,25 +1,117 @@
+import { Hero } from "../sections/hero";
+import { FeaturedPosts } from "../sections/featured-posts";
+import { CategoryChips } from "../sections/category-chips";
+import { getPublicPosts, getPublicCategories } from "@/server/posts";
+import Image from "next/image";
 import { Button } from "../ui/button";
+import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-export default function Landing() {
+export default async function Landing() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const [posts, categories] = await Promise.all([
+    getPublicPosts(),
+    getPublicCategories(),
+  ]);
+
   return (
-    <div className="max-w-5xl mx-auto p-4 h-[calc(100vh-12rem)] flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl md:text-6xl font-bold">
-          stop tab-switching. start mastering.
-        </h1>
-        <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-          the only platform that merges comprehensive documentation, deep-dive
-          tutorials, and competitive coding challenges into one seamless
-          workflow.
-        </p>
-        <div className="mt-8 flex items-center gap-2 justify-center">
-          <Button size={"lg"} className="cursor-pointer">
-            Start Coding for Free
-          </Button>
-          <Button size={"lg"} variant={"outline"} className="cursor-pointer">
-            Learn more
-          </Button>
+    <div>
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl">
+        <div className="max-w-5xl mx-auto p-4 flex justify-between">
+          <Link href={"/"} className="flex items-center gap-2">
+            <Image
+              src={"/shadospace.png"}
+              alt="shadospace"
+              height={36}
+              width={36}
+            />
+            <h1 className="text-2xl font-medium">shadospace</h1>
+          </Link>
+          <nav className="flex items-center gap-2">
+            {session ? (
+              <nav className="flex items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full"
+                    >
+                      <Avatar>
+                        <AvatarImage
+                          src={session.user.image || ""}
+                          alt="shadospace"
+                        />
+                        <AvatarFallback>
+                          {session.user.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem>
+                      <Link href={"/dashboard"}>dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link href={"/settings"}>settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <div>
+                        <form
+                          action={async () => {
+                            "use server";
+                            await auth.api.signOut({
+                              headers: await headers(),
+                            });
+                            revalidatePath("/");
+                            redirect("/signin");
+                          }}
+                        >
+                          <Button
+                            type="submit"
+                            className="cursor-pointer"
+                            variant={"destructive"}
+                          >
+                            Sign Out
+                          </Button>
+                        </form>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </nav>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button variant={"outline"} asChild>
+                  <Link href="/signin">Sign In</Link>
+                </Button>
+                <Button variant={"default"} asChild>
+                  <Link href="/signup">Sign Up</Link>
+                </Button>
+              </div>
+            )}
+          </nav>
         </div>
+      </header>
+      <div className="flex flex-col min-h-screen">
+        <Hero />
+        <CategoryChips categories={categories.slice(0, 6)} />
+        <FeaturedPosts posts={posts.slice(0, 6)} />
       </div>
     </div>
   );

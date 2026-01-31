@@ -17,13 +17,8 @@ import { getCategories, createCategory, deleteCategory } from "@/server/posts";
 import { toast } from "sonner";
 import { slugify } from "@/lib/utils";
 
-type Category = {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  postCount?: number;
-};
+import { DataTable } from "@/components/ui/data-table";
+import { getColumns, Category } from "./columns";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -77,6 +72,8 @@ export default function CategoriesPage() {
       toast.error("Failed to delete category");
     }
   };
+
+  const columns = getColumns({ onDelete: handleDelete });
 
   return (
     <>
@@ -156,72 +153,13 @@ export default function CategoriesPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left">
-                  <thead className="text-xs text-muted-foreground uppercase border-b border-border/50">
-                    <tr>
-                      <th className="px-6 py-4 font-medium">Category</th>
-                      <th className="px-6 py-4 font-medium">Slug</th>
-                      <th className="px-6 py-4 font-medium">Posts Count</th>
-                      <th className="px-6 py-4 font-medium text-right">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/50">
-                    {isLoading ? (
-                      <tr>
-                        <td colSpan={4} className="px-6 py-10 text-center">
-                          <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
-                        </td>
-                      </tr>
-                    ) : categories.length === 0 ? (
-                      <tr>
-                        <td
-                          colSpan={4}
-                          className="px-6 py-10 text-center text-muted-foreground text-sm"
-                        >
-                          No categories found
-                        </td>
-                      </tr>
-                    ) : (
-                      categories.map((category) => (
-                        <tr
-                          key={category.id}
-                          className="hover:bg-muted/30 transition-colors"
-                        >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div className="h-2 w-2 rounded-full bg-primary" />
-                              <span className="font-medium">
-                                {category.name}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-muted-foreground">
-                            {category.slug}
-                          </td>
-                          <td className="px-6 py-4">
-                            {category.postCount || 0} posts
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end gap-2">
-                              <Button
-                                onClick={() => handleDelete(category.id)}
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8 hover:text-destructive text-muted-foreground"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+              {isLoading ? (
+                <div className="px-6 py-10 text-center">
+                  <Loader2 className="h-6 w-6 animate-spin mx-auto text-muted-foreground" />
+                </div>
+              ) : (
+                <DataTable columns={columns} data={categories} />
+              )}
             </CardContent>
           </Card>
         </div>

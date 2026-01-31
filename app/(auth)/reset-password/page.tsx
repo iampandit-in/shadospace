@@ -69,7 +69,7 @@ function ResetPasswordForm() {
           toast.success("password reset successfully");
           router.push("/signin");
         },
-        onError: (ctx: any) => {
+        onError: (ctx) => {
           toast.error(ctx.error.message);
         },
       },

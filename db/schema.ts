@@ -118,9 +118,49 @@ export const post = pgTable(
   ],
 );
 
+export const comment = pgTable(
+  "comment",
+  {
+    id: text("id").primaryKey(),
+    content: text("content").notNull(),
+    postId: text("post_id")
+      .notNull()
+      .references(() => post.id, { onDelete: "cascade" }),
+    authorId: text("author_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("comment_postId_idx").on(table.postId),
+    index("comment_authorId_idx").on(table.authorId),
+  ],
+);
+
+export const like = pgTable(
+  "like",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    postId: text("post_id")
+      .notNull()
+      .references(() => post.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("like_userId_idx").on(table.userId),
+    index("like_postId_idx").on(table.postId),
+  ],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  posts: many(post),
+  comments: many(comment),
+  likes: many(like),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -137,7 +177,7 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const postRelations = relations(post, ({ one }) => ({
+export const postRelations = relations(post, ({ one, many }) => ({
   author: one(user, {
     fields: [post.authorId],
     references: [user.id],
@@ -145,6 +185,30 @@ export const postRelations = relations(post, ({ one }) => ({
   category: one(category, {
     fields: [post.categoryId],
     references: [category.id],
+  }),
+  comments: many(comment),
+  likes: many(like),
+}));
+
+export const commentRelations = relations(comment, ({ one }) => ({
+  post: one(post, {
+    fields: [comment.postId],
+    references: [post.id],
+  }),
+  author: one(user, {
+    fields: [comment.authorId],
+    references: [user.id],
+  }),
+}));
+
+export const likeRelations = relations(like, ({ one }) => ({
+  user: one(user, {
+    fields: [like.userId],
+    references: [user.id],
+  }),
+  post: one(post, {
+    fields: [like.postId],
+    references: [post.id],
   }),
 }));
 
@@ -159,4 +223,6 @@ export const schema = {
   verification,
   post,
   category,
+  comment,
+  like,
 };

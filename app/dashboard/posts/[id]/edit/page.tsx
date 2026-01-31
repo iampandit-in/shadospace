@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,20 +6,22 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
-import { getCategories } from "@/server/posts";
-import { PostForm } from "../_components/post-form";
+import { getCategories, getPostById } from "@/server/posts";
+import { PostForm } from "../../_components/post-form";
+import { notFound } from "next/navigation";
 
-export default function NewPostPage() {
-  const [categories, setCategories] = useState<{ id: string; name: string }[]>(
-    [],
-  );
+export default async function EditPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const post = await getPostById(id);
+  const categories = await getCategories();
 
-  useEffect(() => {
-    getCategories().then((data) =>
-      setCategories(data as { id: string; name: string }[]),
-    );
-  }, []);
+  if (!post) {
+    notFound();
+  }
 
   return (
     <>
@@ -32,13 +32,24 @@ export default function NewPostPage() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbPage>New Post</BreadcrumbPage>
+                <BreadcrumbPage>Edit Post</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
       </header>
-      <PostForm categories={categories} />
+
+      <PostForm
+        initialData={{
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          categoryId: post.categoryId,
+          status: post.status as "draft" | "published",
+          image: post.image,
+        }}
+        categories={categories as { id: string; name: string }[]}
+      />
     </>
   );
 }

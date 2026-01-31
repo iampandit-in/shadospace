@@ -1,10 +1,14 @@
-import { getPostBySlug } from "@/server/posts";
+import { getPostBySlug, getComments } from "@/server/posts";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { PostInteractions } from "./_components/post-interactions";
+import { CommentSection } from "./_components/comment-section";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
@@ -17,6 +21,11 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
   if (!post || post.status !== "published") {
     notFound();
   }
+
+  const comments = await getComments(post.id);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <article className="min-h-screen bg-background">
@@ -54,10 +63,10 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
             <div className="flex items-center gap-4 pt-4">
               <Avatar className="h-10 w-10 border-2 border-primary/20">
                 <AvatarImage src={post.author.image || ""} />
-                <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                <AvatarFallback>{post.author.username}</AvatarFallback>
               </Avatar>
               <div className="text-sm">
-                <p className="font-medium text-white">{post.author.name}</p>
+                <p className="font-medium text-white">{`@${post.author.username}`}</p>
                 <p className="text-muted-foreground">
                   {format(new Date(post.createdAt), "MMMM d, yyyy")} •{" "}
                   {Math.ceil(post.content.length / 1000)} min read
@@ -79,15 +88,21 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
-        <Separator className="my-16 bg-border/50" />
+        <div className="mt-12">
+          <PostInteractions
+            postId={post.id}
+            slug={post.slug}
+            title={post.title}
+            initialViews={post.views}
+          />
+        </div>
 
-        {/* Footer actions / Author bio placeholder */}
-        <div className="rounded-3xl border border-border/50 bg-muted/20 p-8 text-center space-y-4">
-          <h3 className="text-xl font-bold">Thanks for reading!</h3>
-          <p className="text-muted-foreground max-w-lg mx-auto">
-            Stay tuned for more updates and stories from shadospace. Feel free
-            to share this post if you enjoyed it.
-          </p>
+        <div id="comments">
+          <CommentSection
+            postId={post.id}
+            comments={comments}
+            userSession={session}
+          />
         </div>
       </div>
     </article>

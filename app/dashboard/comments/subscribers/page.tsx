@@ -11,8 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Download, Mail, Filter, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
+import { DataTable } from "@/components/ui/data-table";
+import { columns, Subscriber } from "./columns";
+
 export default function SubscribersPage() {
-  const subscribers = [
+  const subscribers: Subscriber[] = [
     {
       id: 1,
       email: "john@example.com",
@@ -84,52 +87,7 @@ export default function SubscribersPage() {
 
         <Card className="border-border/50 bg-muted/20">
           <CardContent className="p-0">
-            <table className="w-full text-sm text-left">
-              <thead className="text-xs text-muted-foreground uppercase border-b border-border/50">
-                <tr>
-                  <th className="px-6 py-4 font-medium">Email</th>
-                  <th className="px-6 py-4 font-medium">Name</th>
-                  <th className="px-6 py-4 font-medium">Joined Date</th>
-                  <th className="px-6 py-4 font-medium">Status</th>
-                  <th className="px-6 py-4 font-medium"></th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/50">
-                {subscribers.map((sub) => (
-                  <tr
-                    key={sub.id}
-                    className="hover:bg-muted/30 transition-colors"
-                  >
-                    <td className="px-6 py-4 font-medium flex items-center gap-2">
-                      <Mail className="h-3 w-3 text-muted-foreground" />
-                      {sub.email}
-                    </td>
-                    <td className="px-6 py-4 font-medium">{sub.name}</td>
-                    <td className="px-6 py-4">{sub.date}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                          sub.status === "Active"
-                            ? "bg-green-500/10 text-green-500"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {sub.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-primary hover:underline bg-transparent p-0 h-auto font-medium"
-                      >
-                        View Profile
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <DataTable columns={columns} data={subscribers} />
           </CardContent>
         </Card>
       </div>
