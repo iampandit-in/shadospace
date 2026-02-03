@@ -16,6 +16,20 @@ export const user = pgTable("user", {
   displayUsername: text("display_username"),
 });
 
+export const post = pgTable("post", {
+  id: text("id").primaryKey(),
+  image: text("image"),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+});
+
 export const session = pgTable(
   "session",
   {
@@ -78,6 +92,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  posts: many(post),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -90,6 +105,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const postRelations = relations(post, ({ one }) => ({
+  user: one(user, {
+    fields: [post.userId],
     references: [user.id],
   }),
 }));

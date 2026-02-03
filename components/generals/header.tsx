@@ -13,8 +13,14 @@ export default function Header() {
     <header className="border-b fixed top-0 left-0 right-0 backdrop-blur-md">
       <div className="container flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="Logo" width={35} height={35} />
-          <p className="text-2xl uppercase font-mono">shadospace</p>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="h-8 w-8"
+          />
+          <p className="text-xl uppercase font-mono">shadospace</p>
         </div>
         <nav className="flex items-center gap-2">
           {isPending ? (
@@ -24,7 +30,7 @@ export default function Header() {
             </div>
           ) : session ? (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" className="cursor-pointer" asChild>
+              <Button variant="outline" className="cursor-pointer" asChild>
                 <Link href="/profile">Profile</Link>
               </Button>
               <Avatar>
