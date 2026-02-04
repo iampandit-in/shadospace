@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
 import Link from "next/link";
 import { User, ArrowRight, Filter, Pencil, Trash } from "lucide-react";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeletePostButton } from "@/components/posts/delete-post-button";
@@ -93,56 +99,52 @@ export default function ProfilePage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-4">
             {postData.map((post) => (
-              <Link
-                href={`/post/${post.post.id}`}
-                key={post.post.id}
-                className="group"
-              >
-                <Card>
-                  <CardHeader>
+              <Card key={post.post.id}>
+                <CardContent>
+                  <Link href={`/post/${post.post.id}`}>
                     <CardTitle className="line-clamp-3">
                       {post.post.title}
                     </CardTitle>
-                  </CardHeader>
-                  <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-9 w-9">
-                        <AvatarImage
-                          src={
-                            post.user.image || "https://github.com/shadcn.png"
-                          }
-                        />
-                        <AvatarFallback className="bg-primary/10 text-primary uppercase text-xs">
-                          {post.user.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="text-xs font-medium">
-                          {post.user.username}
-                        </span>
-                        <div className="flex items-center text-[10px] text-muted-foreground uppercase tracking-wider">
-                          {new Date(post.post.createdAt).toLocaleDateString(
-                            "en-IN",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </div>
+                  </Link>
+                </CardContent>
+                <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src={post.user.image || "https://github.com/shadcn.png"}
+                      />
+                      <AvatarFallback className="bg-primary/10 text-primary uppercase text-sm">
+                        {post.user.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium">
+                        @{post.user.username}
+                      </span>
+                      <div className="flex items-center text-xs text-muted-foreground uppercase tracking-wider">
+                        {new Date(post.post.createdAt).toLocaleDateString(
+                          "en-IN",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button variant="outline">
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button className="cursor-pointer" asChild>
+                      <Link href={`/post/edit/${post.post.id}`}>
                         <Pencil />
-                      </Button>
-                      <DeletePostButton postId={post.post.id} />
-                    </div>
-                  </CardFooter>
-                </Card>
-              </Link>
+                      </Link>
+                    </Button>
+                    <DeletePostButton postId={post.post.id} />
+                  </div>
+                </CardFooter>
+              </Card>
             ))}
           </div>
         )}
