@@ -14,16 +14,11 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
 import { editPost, getPostById } from "@/server/posts";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import Tiptap from "@/components/tiptap/editor";
 const formSchema = z.object({
   title: z.string().min(10, "Title must be at least 10 characters."),
   content: z.string().min(100, "Content must be at least 100 characters."),
@@ -132,20 +127,16 @@ export default function EditPost() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel>Content</FieldLabel>
-                <InputGroup>
-                  <InputGroupTextarea
-                    {...field}
-                    placeholder="there is a simple way to host openCLaw on your PC without the hassle"
-                    rows={6}
-                    className="min-h-24 resize-none rows-6"
-                    aria-invalid={fieldState.invalid}
+                <div className="flex flex-col gap-2">
+                  <Tiptap
+                    className="border border-input p-10 -mt-2 rounded-t-none border-t-0"
+                    content={field.value}
+                    onChange={field.onChange}
                   />
-                  <InputGroupAddon align="block-end">
-                    <InputGroupText className="tabular-nums">
-                      {field.value.length} characters
-                    </InputGroupText>
-                  </InputGroupAddon>
-                </InputGroup>
+                  <div className="flex justify-end text-sm text-muted-foreground tabular-nums">
+                    {field.value.length} characters
+                  </div>
+                </div>
                 <FieldDescription>
                   Include steps to reproduce, expected behavior, and what
                   actually happened.
@@ -158,13 +149,14 @@ export default function EditPost() {
           />
           <Field orientation="horizontal">
             <Button
+              className="cursor-pointer"
               type="button"
               variant="outline"
               onClick={() => form.reset()}
             >
               Reset
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button className="cursor-pointer" type="submit" disabled={loading}>
               {loading ? "Updating..." : "Update"}
             </Button>
           </Field>

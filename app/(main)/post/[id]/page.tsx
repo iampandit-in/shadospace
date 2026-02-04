@@ -5,6 +5,7 @@ import { getPostById } from "@/server/posts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar } from "lucide-react";
+import Tiptap from "@/components/tiptap/editor";
 
 interface Post {
   id: string;
@@ -94,8 +95,8 @@ export default function SinglePostPage() {
           </div>
         </div>
       </div>
-      <div className="prose prose-invert max-w-none">
-        {postData.post.content}
+      <div className="mt-8">
+        <Tiptap content={postData.post.content} readOnly={true} />
       </div>
     </div>
   );

@@ -16,6 +16,8 @@ export const user = pgTable("user", {
   displayUsername: text("display_username"),
 });
 
+export type User = typeof user.$inferSelect;
+
 export const post = pgTable("post", {
   id: text("id").primaryKey(),
   image: text("image"),
@@ -29,6 +31,8 @@ export const post = pgTable("post", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
+export type Post = typeof post.$inferSelect;
 
 export const session = pgTable(
   "session",

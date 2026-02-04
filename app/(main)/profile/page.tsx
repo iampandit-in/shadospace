@@ -1,26 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
-import { DeletePostButton } from "@/components/posts/delete-post-button";
-import { Pencil } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { User, ArrowRight, Filter, Pencil, Trash } from "lucide-react";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { DeletePostButton } from "@/components/posts/delete-post-button";
 
 interface Post {
   id: string;
@@ -50,9 +38,7 @@ interface PostWithUser {
 }
 
 export default function ProfilePage() {
-  const [posts, setPosts] = useState<PostWithUser[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState<"name" | "date">("date");
+  const [postData, setPostData] = useState<PostWithUser[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -60,10 +46,13 @@ export default function ProfilePage() {
       try {
         const response = await getPosts();
         if (response.success && response.posts) {
-          setPosts(response.posts as unknown as PostWithUser[]);
+          setPostData(response.posts as unknown as PostWithUser[]);
+        } else {
+          setPostData([]);
         }
       } catch (error) {
         console.error("Error fetching posts:", error);
+        setPostData([]);
       } finally {
         setLoading(false);
       }
@@ -71,108 +60,93 @@ export default function ProfilePage() {
     fetchPosts();
   }, []);
 
-  const filteredAndSortedPosts = useMemo(() => {
-    let result = [...posts];
-
-    // Search filter
-    if (searchTerm) {
-      result = result.filter((p) =>
-        p.post.title.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    }
-
-    // Sort logic
-    if (sortBy === "name") {
-      result.sort((a, b) => a.post.title.localeCompare(b.post.title));
-    } else {
-      result.sort(
-        (a, b) =>
-          new Date(b.post.createdAt).getTime() -
-          new Date(a.post.createdAt).getTime(),
-      );
-    }
-
-    return result;
-  }, [posts, searchTerm, sortBy]);
-
   return (
-    <div className="mt-4">
-      <div className="flex items-center justify-end gap-2">
-        <Input
-          placeholder="Search by title..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-xs"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Sort: {sortBy === "name" ? "Name" : "Date"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setSortBy("name")}>
-              Sort by name
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy("date")}>
-              Sort by date
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button variant="outline" asChild>
-          <Link href={"/create/post"}>Create Post</Link>
-        </Button>
-      </div>
-      <Table className="mt-4 rounded-2xl">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Post Title</TableHead>
-            <TableHead>Created by</TableHead>
-            <TableHead>Created at</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center py-8">
-                Loading posts...
-              </TableCell>
-            </TableRow>
-          ) : filteredAndSortedPosts.length === 0 ? (
-            <TableRow>
-              <TableCell
-                colSpan={4}
-                className="text-center py-8 text-muted-foreground"
-              >
-                No posts found.
-              </TableCell>
-            </TableRow>
-          ) : (
-            filteredAndSortedPosts.map((post) => (
-              <TableRow key={post.post.id}>
-                <TableCell>
-                  <Link href={`/post/${post.post.id}`}>{post.post.title}</Link>
-                </TableCell>
-                <TableCell>{post.user.username}</TableCell>
-                <TableCell>
-                  {new Date(post.post.createdAt).toLocaleDateString()}
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center gap-2 justify-end">
-                    <Button size={"icon"} variant={"ghost"} asChild>
-                      <Link href={`/edit/post/${post.post.id}`}>
-                        <Pencil className="w-4 h-4" />
-                      </Link>
-                    </Button>
-                    <DeletePostButton postId={post.post.id} />
+    <div>
+      <main className="mt-6 ">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-7 w-full mb-1" />
+                  <Skeleton className="h-7 w-5/6" />
+                </CardHeader>
+                <CardFooter className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Skeleton className="h-9 w-9 rounded-full" />
+                    <div className="flex flex-col gap-1">
+                      <Skeleton className="h-4 w-20" />
+                      <Skeleton className="h-3 w-16" />
+                    </div>
                   </div>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+                  <Skeleton className="h-8 w-8 rounded-md" />
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : postData.length === 0 ? (
+          <div className="text-center py-24 bg-card/30 rounded-3xl border border-dashed border-white/10">
+            <Filter className="mx-auto h-12 w-12 text-muted-foreground/30 mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No posts found</h3>
+            <p className="text-muted-foreground max-w-xs mx-auto mb-8">
+              We couldn&apos;t find any posts matching your criteria.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {postData.map((post) => (
+              <Link
+                href={`/post/${post.post.id}`}
+                key={post.post.id}
+                className="group"
+              >
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="line-clamp-3">
+                      {post.post.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-9 w-9">
+                        <AvatarImage
+                          src={
+                            post.user.image || "https://github.com/shadcn.png"
+                          }
+                        />
+                        <AvatarFallback className="bg-primary/10 text-primary uppercase text-xs">
+                          {post.user.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col">
+                        <span className="text-xs font-medium">
+                          {post.user.username}
+                        </span>
+                        <div className="flex items-center text-[10px] text-muted-foreground uppercase tracking-wider">
+                          {new Date(post.post.createdAt).toLocaleDateString(
+                            "en-IN",
+                            {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            },
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="outline">
+                        <Pencil />
+                      </Button>
+                      <DeletePostButton postId={post.post.id} />
+                    </div>
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

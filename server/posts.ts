@@ -64,6 +64,30 @@ export async function editPost(title: string, content: string, postId: string) {
   }
 }
 
+export async function saveContent(content: string) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const userId = session?.user.id;
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  try {
+    await db.update(post).set({
+      content,
+    });
+    return {
+      success: true,
+      message: "post updated successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "error updating post" + error,
+    };
+  }
+}
+
 export async function getPosts() {
   try {
     const posts = await db
@@ -116,24 +140,6 @@ export async function deletePost(postId: string) {
   }
 
   try {
-    // Check if the post belongs to the user
-    const existingPost = await db
-      .select()
-      .from(post)
-      .where(eq(post.id, postId))
-      .limit(1);
-
-    if (existingPost.length === 0) {
-      return { success: false, message: "Post not found" };
-    }
-
-    if (existingPost[0].userId !== userId) {
-      return {
-        success: false,
-        message: "You are not authorized to delete this post",
-      };
-    }
-
     await db.delete(post).where(eq(post.id, postId));
     revalidatePath("/profile");
     return {

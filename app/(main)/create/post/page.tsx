@@ -14,15 +14,10 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/components/ui/input-group";
 import { createPost } from "@/server/posts";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Tiptap from "@/components/tiptap/editor";
 
 const formSchema = z.object({
   title: z.string().min(10, "Title must be at least 10 characters."),
@@ -80,6 +75,7 @@ export default function CreatePost() {
                   aria-invalid={fieldState.invalid}
                   placeholder="This is an example post title"
                   autoComplete="off"
+                  className="bg-muted-20"
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -93,24 +89,16 @@ export default function CreatePost() {
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel>Content</FieldLabel>
-                <InputGroup>
-                  <InputGroupTextarea
-                    {...field}
-                    placeholder="there is a simple way to host openCLaw on your PC without the hassle"
-                    rows={6}
-                    className="min-h-24 resize-none"
-                    aria-invalid={fieldState.invalid}
+                <div className="flex flex-col gap-2">
+                  <Tiptap
+                    className="p-10 border border-t-0 border-input bg-muted/20 -mt-2 rounded-t-none"
+                    content={field.value}
+                    onChange={field.onChange}
                   />
-                  <InputGroupAddon align="block-end">
-                    <InputGroupText className="tabular-nums">
-                      {field.value.length} characters
-                    </InputGroupText>
-                  </InputGroupAddon>
-                </InputGroup>
-                <FieldDescription>
-                  Include steps to reproduce, expected behavior, and what
-                  actually happened.
-                </FieldDescription>
+                  <div className="flex text-sm text-muted-foreground tabular-nums">
+                    {field.value.replace(/<[^>]*>/g, "").length} characters
+                  </div>
+                </div>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -125,7 +113,7 @@ export default function CreatePost() {
             >
               Reset
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" className="cursor-pointer" disabled={loading}>
               {loading ? "Loading..." : "Submit"}
             </Button>
           </Field>

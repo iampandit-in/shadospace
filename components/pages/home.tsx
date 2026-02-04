@@ -4,17 +4,8 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
 import Link from "next/link";
-import {
-  User,
-  ArrowRight,
-  Filter,
-} from "lucide-react";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { User, ArrowRight, Filter } from "lucide-react";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -110,7 +101,9 @@ export default function HomePage() {
               >
                 <Card>
                   <CardHeader>
-                    <CardTitle>{post.post.title}</CardTitle>
+                    <CardTitle className="line-clamp-3">
+                      {post.post.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">

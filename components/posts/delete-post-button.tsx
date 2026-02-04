@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { deletePost } from "@/server/posts";
 import { Loader2, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -11,6 +12,7 @@ interface DeletePostButtonProps {
 }
 
 export function DeletePostButton({ postId }: DeletePostButtonProps) {
+  const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
 
   const handleDelete = () => {
@@ -21,6 +23,7 @@ export function DeletePostButton({ postId }: DeletePostButtonProps) {
         if (result.success) {
           toast.dismiss();
           toast.success(result.message);
+          router.refresh();
         } else {
           toast.dismiss();
           toast.error(result.message);
@@ -36,12 +39,12 @@ export function DeletePostButton({ postId }: DeletePostButtonProps) {
   return (
     <Button
       size="icon"
-      variant="ghost"
+      variant="destructive"
       onClick={handleDelete}
       disabled={isPending}
       aria-label="Delete post"
     >
-      {isPending ? <Loader2 /> : <Trash className="text-red-500" />}
+      {isPending ? <Loader2 className="animate-spin" /> : <Trash />}
     </Button>
   );
 }

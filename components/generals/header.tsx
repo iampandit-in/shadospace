@@ -31,15 +31,14 @@ export default function Header() {
             </div>
           ) : session ? (
             <div className="flex items-center gap-2">
-              <Button variant="outline" className="cursor-pointer" asChild>
-                <Link href="/profile">Profile</Link>
-              </Button>
-              <Avatar>
-                <AvatarImage
-                  src={session.user.image || "https://github.com/shadcn.png"}
-                />
-                <AvatarFallback>{session.user.name![0]}</AvatarFallback>
-              </Avatar>
+              <Link href="/profile">
+                <Avatar>
+                  <AvatarImage
+                    src={session.user.image || "https://github.com/shadcn.png"}
+                  />
+                  <AvatarFallback>{session.user.name![0]}</AvatarFallback>
+                </Avatar>
+              </Link>
             </div>
           ) : (
             <>
