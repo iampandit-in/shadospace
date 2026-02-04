@@ -1,34 +1,22 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
 import Link from "next/link";
 import {
-  Search,
-  Calendar,
   User,
   ArrowRight,
   Filter,
-  SortAsc,
 } from "lucide-react";
 import {
   Card,
-  CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import Image from "next/image";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface Post {
   id: string;
