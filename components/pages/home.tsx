@@ -118,7 +118,7 @@ export default function HomePage() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="text-xs font-medium">
+                        <span className="text-sm font-medium">
                           {post.user.username}
                         </span>
                         <div className="flex items-center text-[10px] text-muted-foreground uppercase tracking-wider">

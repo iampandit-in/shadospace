@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
 import Link from "next/link";
-import { User, ArrowRight, Filter, Pencil, Trash } from "lucide-react";
+import { User, Filter, Pencil } from "lucide-react";
 import {
   Card,
   CardContent,

@@ -21,7 +21,7 @@ export default function Header() {
             height={100}
             className="h-8 w-8"
           />
-          <p className="text-xl uppercase font-mono">shadospace</p>
+          <p className="text-2xl">shadospace</p>
         </Link>
         <nav className="flex items-center gap-2">
           {isPending ? (
