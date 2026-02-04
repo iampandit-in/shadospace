@@ -10,10 +10,11 @@ import { Skeleton } from "../ui/skeleton";
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
   return (
-    <header className="border-b fixed top-0 left-0 right-0 backdrop-blur-md">
+    <header className="border-b bg-background/50 z-50 fixed top-0 left-0 right-0 backdrop-blur-md">
       <div className="container flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href={"/"} className="flex items-center gap-2">
           <Image
+            loading="lazy"
             src="/logo.png"
             alt="Logo"
             width={100}
@@ -21,7 +22,7 @@ export default function Header() {
             className="h-8 w-8"
           />
           <p className="text-xl uppercase font-mono">shadospace</p>
-        </div>
+        </Link>
         <nav className="flex items-center gap-2">
           {isPending ? (
             <div className="flex items-center gap-2">
