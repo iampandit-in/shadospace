@@ -61,7 +61,7 @@ export default function CreatePost() {
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-2 md:mt-8">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Controller
@@ -69,13 +69,13 @@ export default function CreatePost() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Post Title</FieldLabel>
+                <FieldLabel className="uppercase">Post Title</FieldLabel>
                 <Input
                   {...field}
                   aria-invalid={fieldState.invalid}
                   placeholder="This is an example post title"
                   autoComplete="off"
-                  className="bg-muted-20"
+                  className="bg-muted-20 md:py-5 md:px-4"
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -88,10 +88,10 @@ export default function CreatePost() {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Content</FieldLabel>
+                <FieldLabel className="uppercase">Post Content</FieldLabel>
                 <div className="flex flex-col gap-2">
                   <Tiptap
-                    className="p-10 border border-t-0 border-input bg-muted/20 -mt-2 rounded-t-none"
+                    className="md:p-10 p-5 border border-t-0 border-input bg-muted/20 -mt-2 rounded-t-none"
                     content={field.value}
                     onChange={field.onChange}
                   />
@@ -105,16 +105,21 @@ export default function CreatePost() {
               </Field>
             )}
           />
-          <Field orientation="horizontal">
+          <Field orientation="horizontal" className="flex justify-end gap-2">
             <Button
               type="button"
               variant="outline"
+              className="cursor-pointer w-1/2"
               onClick={() => form.reset()}
             >
               Reset
             </Button>
-            <Button type="submit" className="cursor-pointer" disabled={loading}>
-              {loading ? "Loading..." : "Submit"}
+            <Button
+              type="submit"
+              className="cursor-pointer w-1/2"
+              disabled={loading}
+            >
+              {loading ? "Creating Post..." : "Create Post"}
             </Button>
           </Field>
         </FieldGroup>

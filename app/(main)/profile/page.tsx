@@ -67,8 +67,8 @@ export default function ProfilePage() {
   }, []);
 
   return (
-    <div>
-      <main className="mt-6 ">
+    <div className="mt-2">
+      <main>
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -99,7 +99,7 @@ export default function ProfilePage() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {postData.map((post) => (
               <Card key={post.post.id}>
                 <CardContent>

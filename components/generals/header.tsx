@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "../ui/button";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -14,31 +22,52 @@ export default function Header() {
       <div className="container flex items-center justify-between">
         <Link href={"/"} className="flex items-center gap-2">
           <Image
-            loading="lazy"
             src="/logo.png"
             alt="Logo"
             width={100}
             height={100}
-            className="h-8 w-8"
+            className="h-8 w-8 dark:invert"
           />
-          <p className="text-2xl">shadospace</p>
+          <p className="text-xl">shadospace</p>
         </Link>
         <nav className="flex items-center gap-2">
           {isPending ? (
             <div className="flex items-center gap-2">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-10 w-10 rounded-full" />
+              <Skeleton className="h-10 w-10 rounded-full animate-pulse" />
             </div>
           ) : session ? (
             <div className="flex items-center gap-2">
-              <Link href="/profile">
-                <Avatar>
-                  <AvatarImage
-                    src={session.user.image || "https://github.com/shadcn.png"}
-                  />
-                  <AvatarFallback>{session.user.name![0]}</AvatarFallback>
-                </Avatar>
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage
+                      src={
+                        session.user.image || "https://github.com/shadcn.png"
+                      }
+                    />
+                    <AvatarFallback>{session.user.name![0]}</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <Link href="/profile">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/create/post">Create Post</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link href="/settings">Settings</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link href="/api/auth/sign-out">Logout</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : (
             <>
