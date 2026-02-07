@@ -136,9 +136,9 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button className="cursor-pointer" asChild>
+                    <Button className="cursor-pointer " size={"icon"} asChild>
                       <Link href={`/post/edit/${post.post.id}`}>
-                        <Pencil />
+                        <Pencil size={14} />
                       </Link>
                     </Button>
                     <DeletePostButton postId={post.post.id} />

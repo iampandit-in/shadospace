@@ -43,6 +43,7 @@ export function DeletePostButton({ postId }: DeletePostButtonProps) {
       onClick={handleDelete}
       disabled={isPending}
       aria-label="Delete post"
+      className="cursor-pointer"
     >
       {isPending ? <Loader2 className="animate-spin" /> : <Trash />}
     </Button>

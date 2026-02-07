@@ -14,9 +14,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
+  const handleSignOut = () => {
+    authClient.signOut();
+    router.refresh();
+  };
   return (
     <header className="border-b bg-background/50 z-50 fixed top-0 left-0 right-0 backdrop-blur-md">
       <div className="container flex items-center justify-between">
@@ -48,11 +54,12 @@ export default function Header() {
                     <AvatarFallback>{session.user.name![0]}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent align="end">
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
                       <Link href="/profile">Profile</Link>
                     </DropdownMenuItem>
+
                     <DropdownMenuItem>
                       <Link href="/create/post">Create Post</Link>
                     </DropdownMenuItem>
@@ -63,7 +70,13 @@ export default function Header() {
                   <DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <Link href="/api/auth/sign-out">Logout</Link>
+                      <Button
+                        className="cursor-pointer"
+                        variant={"destructive"}
+                        onClick={handleSignOut}
+                      >
+                        Logout
+                      </Button>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
