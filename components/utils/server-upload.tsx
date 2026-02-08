@@ -1,5 +1,3 @@
-"use server";
-
 import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
@@ -7,12 +5,13 @@ export async function Upload() {
   async function uploadImage(formData: FormData) {
     "use server";
     const imageFile = formData.get("image") as File;
-    const blob = await put(imageFile.name, imageFile, {
+    await put(imageFile.name, imageFile, {
       access: "public",
+      token: process.env.SHADOSPACE_READ_WRITE_TOKEN,
+      contentType: imageFile.type,
       addRandomSuffix: true,
     });
     revalidatePath("/");
-    return blob;
   }
 
   return (
