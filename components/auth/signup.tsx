@@ -122,7 +122,6 @@ export function SignupForm() {
                         disabled={loading}
                         aria-invalid={fieldState.invalid}
                         placeholder="Pandit"
-                        autoComplete="off"
                         className="-mt-1"
                       />
                       {fieldState.invalid && (
@@ -143,7 +142,6 @@ export function SignupForm() {
                         disabled={loading}
                         aria-invalid={fieldState.invalid}
                         placeholder="@iampandit"
-                        autoComplete="off"
                         className="-mt-1"
                       />
                       {fieldState.invalid && (
@@ -166,7 +164,6 @@ export function SignupForm() {
                       disabled={loading}
                       aria-invalid={fieldState.invalid}
                       placeholder="m@example.com"
-                      autoComplete="off"
                       className="-mt-1"
                     />
                     {fieldState.invalid && (
@@ -188,7 +185,6 @@ export function SignupForm() {
                       disabled={loading}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      autoComplete="off"
                       className="-mt-1"
                     />
                     {fieldState.invalid && (
@@ -212,7 +208,6 @@ export function SignupForm() {
                       disabled={loading}
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
-                      autoComplete="off"
                       className="-mt-1"
                     />
                     {fieldState.invalid && (

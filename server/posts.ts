@@ -108,6 +108,30 @@ export async function getPosts() {
   }
 }
 
+export async function getUserPosts(userId: string) {
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+  try {
+    const posts = await db
+      .select()
+      .from(post)
+      .innerJoin(user, eq(post.userId, user.id))
+      .where(eq(post.userId, userId));
+    return {
+      success: true,
+      message: "posts fetched successfully",
+      posts,
+    };
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return {
+      success: false,
+      message: "error fetching posts" + error,
+    };
+  }
+}
+
 export async function getPostById(postId: string) {
   try {
     const singlePost = await db

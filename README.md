@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# shadospace
 
-## Getting Started
+shadospace is a modern blogging platform for developers and teams. It combines a clean writing experience with authentication, rich text editing, and scalable content management so you can launch a solo blog and grow to a multi-author publication.
 
-First, run the development server:
+## ✨ Features
+
+- Developer-focused blogging experience with a responsive UI.
+- Rich text editing powered by Tiptap.
+- Authentication and user accounts via Better Auth.
+- PostgreSQL persistence with Drizzle ORM.
+- Built on Next.js App Router with server actions.
+
+## 🧰 Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **UI:** Tailwind CSS, shadcn/ui
+- **Editor:** Tiptap
+- **Auth:** Better Auth
+- **Database:** PostgreSQL + Drizzle ORM
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ (or Bun)
+- PostgreSQL database (local or hosted)
+
+### Installation
+
+```bash
+npm install
+bun install
+```
+
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```bash
+DATABASE_URL=your neon database connection string
+BETTER_AUTH_SECRET=your better auth secret
+BETTER_AUTH_URL=localhost for dev & prod url
+GOOGLE_CLIENT_ID=google client id
+GOOGLE_CLIENT_SECRET=google client secret
+SHADOSPACE_READ_WRITE_TOKEN=vercel blob read write token
+```
+
+> **Note:** Google OAuth is optional; omit the credentials if you are not using Google login.
+
+### Run the App
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧪 Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run dev      # start development server
+bun run build    # build for production
+```
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! If you'd like to help improve ShadoSpace:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`.
+3. Commit your changes: `git commit -m "Add your feature"`.
+4. Push to your fork: `git push origin feature/your-feature`.
+5. Open a Pull Request describing your changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Please keep PRs focused and include context, screenshots (if UI changes), and any relevant testing information.
 
-## Deploy on Vercel
+## ⭐ Show Your Support
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you find shadospace useful, please consider giving the project a star on GitHub. It helps others discover the project and motivates continued development!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+This project is currently not licensed. If you'd like to use it in your own work, please open an issue to discuss licensing.

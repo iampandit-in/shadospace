@@ -61,7 +61,7 @@ export default function Header() {
                     </DropdownMenuItem>
 
                     <DropdownMenuItem>
-                      <Link href="/create/post">Create Post</Link>
+                      <Link href="/create/post">Create</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link href="/settings">Settings</Link>
@@ -87,7 +87,7 @@ export default function Header() {
               <Button className="cursor-pointer" asChild>
                 <Link href="/signin">Sign In</Link>
               </Button>
-              <Button className="cursor-pointer" asChild>
+              <Button className="cursor-pointer hidden md:flex" asChild>
                 <Link href="/signup">Sign Up</Link>
               </Button>
             </>
