@@ -32,6 +32,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <h1 className="sr-only">Latest Posts - shadospace</h1>
       <main className="mt-2">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
