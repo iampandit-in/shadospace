@@ -1,56 +1,25 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { getPosts } from "@/server/posts";
-import Link from "next/link";
-import { User, Filter, Pencil } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { DeletePostButton } from "@/components/posts/delete-post-button";
-
-interface Post {
-  id: string;
-  image: string | null;
-  title: string;
-  content: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  username: string | null;
-  displayUsername: string | null;
-}
-
-interface PostWithUser {
-  post: Post;
-  user: User;
-}
+import { getUserPosts } from "@/server/posts";
+import { Filter } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { PostCard } from "@/components/posts/post-card";
+import { PostCardSkeleton } from "@/components/posts/post-card-skeleton";
+import { PostWithUser } from "@/types";
 
 export default function ProfilePage() {
+  const { data: session } = authClient.useSession();
   const [postData, setPostData] = useState<PostWithUser[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
+      const userId = session?.user?.id;
+      if (!userId) return;
+
       try {
-        const response = await getPosts();
+        const response = await getUserPosts(userId);
         if (response.success && response.posts) {
           setPostData(response.posts as unknown as PostWithUser[]);
         } else {
@@ -64,7 +33,7 @@ export default function ProfilePage() {
       }
     };
     fetchPosts();
-  }, []);
+  }, [session?.user?.id]);
 
   return (
     <div className="mt-2">
@@ -72,22 +41,7 @@ export default function ProfilePage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <Skeleton className="h-7 w-full mb-1" />
-                  <Skeleton className="h-7 w-5/6" />
-                </CardHeader>
-                <CardFooter className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="h-9 w-9 rounded-full" />
-                    <div className="flex flex-col gap-1">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-3 w-16" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-8 w-8 rounded-md" />
-                </CardFooter>
-              </Card>
+              <PostCardSkeleton key={i} />
             ))}
           </div>
         ) : postData.length === 0 ? (
@@ -101,50 +55,7 @@ export default function ProfilePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {postData.map((post) => (
-              <Card key={post.post.id}>
-                <CardContent>
-                  <Link href={`/post/${post.post.id}`}>
-                    <CardTitle className="line-clamp-3">
-                      {post.post.title}
-                    </CardTitle>
-                  </Link>
-                </CardContent>
-                <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <Avatar className="h-9 w-9">
-                      <AvatarImage
-                        src={post.user.image || "https://github.com/shadcn.png"}
-                      />
-                      <AvatarFallback className="bg-primary/10 text-primary uppercase text-sm">
-                        {post.user.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium">
-                        @{post.user.username}
-                      </span>
-                      <div className="flex items-center text-xs text-muted-foreground uppercase tracking-wider">
-                        {new Date(post.post.createdAt).toLocaleDateString(
-                          "en-IN",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          },
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button className="cursor-pointer " size={"icon"} asChild>
-                      <Link href={`/post/edit/${post.post.id}`}>
-                        <Pencil size={14} />
-                      </Link>
-                    </Button>
-                    <DeletePostButton postId={post.post.id} />
-                  </div>
-                </CardFooter>
-              </Card>
+              <PostCard key={post.post.id} post={post} showActions />
             ))}
           </div>
         )}

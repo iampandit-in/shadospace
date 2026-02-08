@@ -1,40 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getPosts } from "@/server/posts";
-import Link from "next/link";
-import { User, ArrowRight, Filter } from "lucide-react";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-
-interface Post {
-  id: string;
-  image: string | null;
-  title: string;
-  content: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  username: string | null;
-  displayUsername: string | null;
-}
-
-interface PostWithUser {
-  post: Post;
-  user: User;
-}
+import { Filter } from "lucide-react";
+import { PostCard } from "@/components/posts/post-card";
+import { PostCardSkeleton } from "@/components/posts/post-card-skeleton";
+import { PostWithUser } from "@/types";
 
 export default function HomePage() {
   const [postData, setPostData] = useState<PostWithUser[]>([]);
@@ -65,22 +36,7 @@ export default function HomePage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <Skeleton className="h-7 w-full mb-1" />
-                  <Skeleton className="h-7 w-5/6" />
-                </CardHeader>
-                <CardFooter className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <Skeleton className="h-9 w-9 rounded-full" />
-                    <div className="flex flex-col gap-1">
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-3 w-16" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-8 w-8 rounded-md" />
-                </CardFooter>
-              </Card>
+              <PostCardSkeleton key={i} />
             ))}
           </div>
         ) : postData.length === 0 ? (
@@ -94,51 +50,7 @@ export default function HomePage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {postData.map((post) => (
-              <Link
-                href={`/post/${post.post.id}`}
-                key={post.post.id}
-                className="group"
-              >
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="line-clamp-3">
-                      {post.post.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-9 w-9">
-                        <AvatarImage
-                          src={
-                            post.user.image || "https://github.com/shadcn.png"
-                          }
-                        />
-                        <AvatarFallback className="bg-primary/10 text-primary uppercase text-xs">
-                          {post.user.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium">
-                          {post.user.username}
-                        </span>
-                        <div className="flex items-center text-[10px] text-muted-foreground uppercase tracking-wider">
-                          {new Date(post.post.createdAt).toLocaleDateString(
-                            "en-IN",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            },
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <Button variant="ghost">
-                      <ArrowRight />
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </Link>
+              <PostCard key={post.post.id} post={post} />
             ))}
           </div>
         )}

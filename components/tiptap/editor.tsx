@@ -21,18 +21,41 @@ import {
   Heading1,
   Heading2,
   Code2,
+  Loader2,
 } from "lucide-react";
+import { uploadImageClient } from "@/lib/upload";
+import { useRef, useState } from "react";
+import { toast } from "sonner";
 
 const lowlight = createLowlight(common);
 
 const Toolbar = ({ editor }: { editor: Editor | null }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   if (!editor) return null;
 
-  const addImage = () => {
-    const url = window.prompt("URL");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        setIsUploading(true);
+        toast.loading("Uploading image...", { id: "tiptap-upload" });
+        const url = await uploadImageClient(file, "posts/content");
+        editor.chain().focus().setImage({ src: url }).run();
+        toast.success("Image uploaded", { id: "tiptap-upload" });
+      } catch (error) {
+        toast.error("Failed to upload image", { id: "tiptap-upload" });
+        console.error(error);
+      } finally {
+        setIsUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
     }
+  };
+
+  const addImage = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -148,10 +171,23 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
       <button
         type="button"
         onClick={addImage}
-        className="p-2 hover:bg-input rounded-md"
+        disabled={isUploading}
+        className="p-2 hover:bg-input rounded-md disabled:opacity-50"
+        title="Upload Image"
       >
-        <ImageIcon className="h-4 w-4" />
+        {isUploading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <ImageIcon className="h-4 w-4" />
+        )}
       </button>
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
@@ -220,7 +256,7 @@ const Tiptap = ({
       }),
       Image.configure({
         HTMLAttributes: {
-          class: "rounded-md max-w-full h-auto mx-auto",
+          class: "rounded-md w-full h-auto object-cover",
         },
       }),
       CodeBlockLowlight.configure({

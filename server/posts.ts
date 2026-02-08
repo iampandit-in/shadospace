@@ -3,11 +3,15 @@
 import { db } from "@/db";
 import { post, user } from "@/db/schema";
 import { auth } from "@/lib/auth";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
-export async function createPost(title: string, content: string) {
+export async function createPost(
+  title: string,
+  content: string,
+  image?: string,
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -21,6 +25,7 @@ export async function createPost(title: string, content: string) {
       userId,
       title,
       content,
+      image,
     });
     revalidatePath("/profile");
     return {
@@ -35,7 +40,12 @@ export async function createPost(title: string, content: string) {
   }
 }
 
-export async function editPost(title: string, content: string, postId: string) {
+export async function editPost(
+  title: string,
+  content: string,
+  postId: string,
+  image?: string,
+) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -49,6 +59,7 @@ export async function editPost(title: string, content: string, postId: string) {
       .set({
         title,
         content,
+        image,
       })
       .where(eq(post.id, postId));
     revalidatePath("/profile");
@@ -93,6 +104,7 @@ export async function getPosts() {
     const posts = await db
       .select()
       .from(post)
+      .orderBy(desc(post.createdAt))
       .innerJoin(user, eq(post.userId, user.id));
     return {
       success: true,
@@ -116,6 +128,7 @@ export async function getUserPosts(userId: string) {
     const posts = await db
       .select()
       .from(post)
+      .orderBy(desc(post.createdAt))
       .innerJoin(user, eq(post.userId, user.id))
       .where(eq(post.userId, userId));
     return {
