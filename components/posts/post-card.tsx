@@ -86,7 +86,7 @@ export function PostCard({ post, showActions = false }: PostCardProps) {
               <DeletePostButton postId={post.post.id} />
             </div>
           ) : (
-            <Button variant="outline" size="icon" asChild>
+            <Button variant="ghost" size="icon" asChild>
               <Link href={`/post/${post.post.id}`}>
                 <ArrowRight className="h-4 w-4" />
               </Link>
