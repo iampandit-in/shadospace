@@ -137,7 +137,7 @@ export default function EditPost() {
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 container">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Field>

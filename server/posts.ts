@@ -152,7 +152,6 @@ export async function getPostById(postId: string) {
       .from(post)
       .innerJoin(user, eq(post.userId, user.id))
       .where(eq(post.id, postId));
-    revalidatePath("/profile");
     return {
       success: true,
       message: "post fetched successfully",

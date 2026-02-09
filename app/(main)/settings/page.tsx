@@ -82,7 +82,7 @@ export default function Settings() {
     }
   };
   return (
-    <div className="">
+    <div className="container">
       <h1 className="text-xl font-semibold mb-6">Settings</h1>
       <div className="flex flex-col max-w-md mx-auto">
         {isPending ? (

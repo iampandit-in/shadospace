@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Calendar, Pencil } from "lucide-react";
+import { Calendar, Pencil, Trash } from "lucide-react";
 import Tiptap from "@/components/tiptap/editor";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -42,9 +42,9 @@ interface PostViewProps {
 
 export function PostView({ postData, currentUserId }: PostViewProps) {
   return (
-    <div className="py-6 space-y-8">
+    <div className="-mt-4">
       {postData.post.image && (
-        <div className="relative w-full h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden border">
+        <div className="relative w-full h-[40vh] md:h-[60vh] overflow-hidden">
           <Image
             src={postData.post.image}
             alt={postData.post.title}
@@ -53,47 +53,68 @@ export function PostView({ postData, currentUserId }: PostViewProps) {
             unoptimized
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
-          {currentUserId === postData.user.id && (
-            <Button
-              size="icon"
-              variant="outline"
-              className="absolute top-6 right-6 z-20 cursor-pointer"
-              asChild
-            >
-              <Link href={`/edit/post/${postData.post.id}`}>
-                <Pencil size="8" />
-              </Link>
-            </Button>
-          )}
-          <div className="absolute inset-x-0 bottom-0 p-6 md:p-10 space-y-4">
-            <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+          <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black/20" />
+          <div className="absolute inset-x-0 bottom-0 space-y-4 container">
+            <h1 className="text-2xl md:text-5xl font-bold leading-tight">
               {postData.post.title}
             </h1>
-            <div className="flex items-center gap-4 text-white/90">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Avatar className="h-8 w-8 border border-white/20">
-                  <AvatarImage
-                    src={postData.user.image || "https://github.com/shadcn.png"}
-                  />
-                  <AvatarFallback>{postData.user.name[0]}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium">
-                  @{postData.user.username}
-                </span>
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={
+                        postData.user.image || "https://github.com/shadcn.png"
+                      }
+                    />
+                    <AvatarFallback>{postData.user.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium">
+                    @{postData.user.username}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar className="h-4 w-4" />
+                  <span>
+                    {new Date(postData.post.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4" />
-                <span>
-                  {new Date(postData.post.createdAt).toLocaleDateString()}
-                </span>
+              <div>
+                {currentUserId === postData.user.id && (
+                  <div className="flex items-center gap-2">
+                    {" "}
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="cursor-pointer"
+                      asChild
+                    >
+                      <Link href={`/edit/post/${postData.post.id}`}>
+                        <Pencil size="8" />
+                      </Link>
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="destructive"
+                      className="cursor-pointer"
+                    >
+                      <Trash size="8" />
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className={cn(!postData.post.image && "space-y-6")}>
+      <div
+        className={cn(
+          "container -mt-4",
+          !postData.post.image && "space-y-6 -mt-4",
+        )}
+      >
         {!postData.post.image && (
           <>
             <h1 className="text-4xl font-bold">{postData.post.title}</h1>

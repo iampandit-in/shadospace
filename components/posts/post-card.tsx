@@ -22,40 +22,40 @@ interface PostCardProps {
 export function PostCard({ post, showActions = false }: PostCardProps) {
   return (
     <article>
-      <Card>
+      <div>
         {post.post.image ? (
           <Link href={`/post/${post.post.id}`} className="block">
-            <CardHeader className="border-b">
+            <div>
               <Image
                 src={post.post.image}
                 alt={post.post.title}
                 width={500}
                 height={500}
                 unoptimized
-                className="object-cover rounded-md h-32"
+                className="object-cover rounded-md h-38"
               />
-            </CardHeader>
+            </div>
           </Link>
         ) : (
-          <CardHeader className="h-36 w-full object-cover flex items-center justify-center border-b">
-            <ImageOff />
-          </CardHeader>
+          <div className="border rounded-md h-38 w-full object-cover flex items-center justify-center">
+            <ImageOff className="opacity-50" />
+          </div>
         )}
 
-        <CardContent className="flex-1">
-          <Link href={`/post/${post.post.id}`} className="block">
-            <h3 className="text-xl font-semibold leading-none tracking-tight line-clamp-3 hover:text-primary transition-colors">
+        <div className="flex-1 mt-2">
+          <Link href={`/post/${post.post.id}`}>
+            <h3 className="text-base font-medium line-clamp-3 leading-tight">
               {post.post.title}
             </h3>
           </Link>
-        </CardContent>
+        </div>
 
-        <CardFooter className="text-muted-foreground flex items-center justify-between gap-2">
+        <div className="mt-2 text-muted-foreground flex items-center justify-between gap-2">
           <Link
             href={`/users/user/${post.user.id}`}
             className="flex items-center gap-2"
           >
-            <Avatar className="h-9 w-9">
+            <Avatar className="h-7 w-7">
               <AvatarImage
                 src={post.user.image || "https://github.com/shadcn.png"}
               />
@@ -76,7 +76,6 @@ export function PostCard({ post, showActions = false }: PostCardProps) {
               </div>
             </div>
           </Link>
-
           {showActions ? (
             <div className="flex items-center gap-2">
               <Button className="cursor-pointer" size="icon" asChild>
@@ -87,14 +86,14 @@ export function PostCard({ post, showActions = false }: PostCardProps) {
               <DeletePostButton postId={post.post.id} />
             </div>
           ) : (
-            <Button variant="ghost" size="icon" asChild>
+            <Button variant="outline" size="icon" asChild>
               <Link href={`/post/${post.post.id}`}>
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
           )}
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </article>
   );
 }

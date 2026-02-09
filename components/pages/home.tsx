@@ -31,7 +31,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <h1 className="sr-only">Latest Posts - shadospace</h1>
       <main className="mt-2">
         {loading ? (

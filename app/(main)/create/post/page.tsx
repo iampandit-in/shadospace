@@ -91,7 +91,7 @@ export default function CreatePost() {
   }
 
   return (
-    <div className="mt-2 md:mt-8">
+    <div className="mt-2 md:mt-8 container">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <Field>
