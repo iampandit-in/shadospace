@@ -32,7 +32,9 @@ export default function Header() {
             alt="Logo"
             width={100}
             height={100}
-            className="h-8 w-8 dark:invert"
+            className="h-8 w-8"
+            loading="eager"
+            priority
           />
           <p className="text-xl">shadospace</p>
         </Link>
