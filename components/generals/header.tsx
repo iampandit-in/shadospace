@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { ArrowDown, ChevronDown } from "lucide-react";
 
 export default function Header() {
   const router = useRouter();
@@ -36,8 +37,26 @@ export default function Header() {
             loading="eager"
             priority
           />
-          <p className="text-xl">shadospace</p>
+          <p className="text-2xl font-medium">shadospace</p>
         </Link>
+        <nav className="flex items-center gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost">
+                Tutorials <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/tutorials/python">Python</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/tutorials/javascript">JavaScript</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </nav>
         <nav className="flex items-center gap-2">
           {isPending ? (
             <div className="flex items-center gap-2">
@@ -86,11 +105,8 @@ export default function Header() {
             </div>
           ) : (
             <>
-              <Button className="cursor-pointer" asChild>
+              <Button variant={"outline"} className="cursor-pointer" asChild>
                 <Link href="/signin">Sign In</Link>
-              </Button>
-              <Button className="cursor-pointer hidden md:flex" asChild>
-                <Link href="/signup">Sign Up</Link>
               </Button>
             </>
           )}

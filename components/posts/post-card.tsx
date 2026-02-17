@@ -32,12 +32,12 @@ export function PostCard({ post, showActions = false }: PostCardProps) {
                 width={500}
                 height={500}
                 unoptimized
-                className="object-cover rounded-md h-38"
+                className="object-cover rounded-md h-50"
               />
             </div>
           </Link>
         ) : (
-          <div className="border rounded-md h-38 w-full object-cover flex items-center justify-center">
+          <div className="border rounded-md h-50 w-full object-cover flex items-center justify-center">
             <ImageOff className="opacity-50" />
           </div>
         )}
@@ -52,7 +52,7 @@ export function PostCard({ post, showActions = false }: PostCardProps) {
 
         <div className="mt-2 text-muted-foreground flex items-center justify-between gap-2">
           <Link
-            href={`/users/user/${post.user.id}`}
+            href={`/user/${post.user.username}`}
             className="flex items-center gap-2"
           >
             <Avatar className="h-7 w-7">

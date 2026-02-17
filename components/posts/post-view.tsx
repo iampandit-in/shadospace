@@ -54,7 +54,7 @@ export function PostView({ postData, currentUserId }: PostViewProps) {
             className="object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-black/20" />
-          <div className="absolute inset-x-0 bottom-0 space-y-4 container">
+          <div className="absolute max-w-4xl mx-auto inset-x-0 bottom-6 space-y-4">
             <h1 className="text-2xl md:text-5xl font-bold leading-tight">
               {postData.post.title}
             </h1>
@@ -139,7 +139,7 @@ export function PostView({ postData, currentUserId }: PostViewProps) {
             </div>
           </>
         )}
-        <div className="mt-8 prose-lg">
+        <div className="mt-8 max-w-4xl mx-auto prose-lg">
           <Tiptap content={postData.post.content} readOnly={true} />
         </div>
       </div>

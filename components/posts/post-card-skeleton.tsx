@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function PostCardSkeleton() {
   return (
     <div className="animate-pulse">
-      <div className="border rounded-md h-38 w-full bg-muted/50" />
+      <div className="border rounded-md h-50 w-full bg-muted/50" />
 
       <div className="flex-1 mt-2 space-y-2">
         <Skeleton className="h-5 w-full" />
