@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "@/server/posts";
 import { Filter } from "lucide-react";
 import { PostCard } from "@/components/posts/post-card";
@@ -8,34 +8,22 @@ import { PostCardSkeleton } from "@/components/posts/post-card-skeleton";
 import { PostWithUser } from "@/types";
 
 export default function HomePage() {
-  const [postData, setPostData] = useState<PostWithUser[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await getPosts();
-        if (response.success && response.posts) {
-          setPostData(response.posts as unknown as PostWithUser[]);
-        } else {
-          setPostData([]);
-        }
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setPostData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPosts();
-  }, []);
+  const { data: postData = [], isLoading: loading } = useQuery({
+    queryKey: ["posts", "feed"],
+    queryFn: async () => {
+      const response = await getPosts();
+      return response.success && response.posts
+        ? (response.posts as unknown as PostWithUser[])
+        : [];
+    },
+  });
 
   return (
     <div className="container">
       <h1 className="sr-only">Latest Posts - shadospace</h1>
       <main className="mt-2">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <PostCardSkeleton key={i} />
             ))}
@@ -49,7 +37,7 @@ export default function HomePage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
             {postData.map((post) => (
               <PostCard key={post.post.id} post={post} />
             ))}

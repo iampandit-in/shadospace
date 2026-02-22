@@ -5,21 +5,32 @@ import { authClient } from "@/lib/auth-client";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import LoadingButton from "../utils/loading-button";
+import { useTransition } from "react";
 
 export default function LandingPage() {
+  const [isPending, startTransition] = useTransition();
+
+  const onGoogleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    startTransition(async () => {
+      await authClient.signIn.social({
+        provider: "google",
+      });
+    });
+  };
   return (
     <main>
-      <div className="mt-16">
+      <div className="flex items-center justify-center h-[calc(100vh-12rem)]">
         <div className="container">
           <h1 className="text-3xl md:text-5xl font-semibold text-center">
-            The best blogging platform for developers and teams.
+            The best platform for developers and content creators.
           </h1>
           <p className="text-base md:text-lg my-4 text-center text-muted-foreground">
-            Start a solo blog for free and scale to thousands of members.
-            Customizable with domain mapping and headless mode. Trusted by
-            millions of developers worldwide.
+            Document your code and share your knowledge with the world.
           </p>
-          <div className="flex flex-col md:flex-row gap-2 justify-center">
+          <div className="mt-10 flex flex-col md:flex-row gap-2 justify-center">
             <Button
               className="h-12 w-full md:w-44 cursor-pointer rounded-xl flex items-center gap-2"
               variant={"default"}
@@ -30,29 +41,19 @@ export default function LandingPage() {
                 Signup for free <ArrowRight />
               </Link>
             </Button>
-            <Button
-              className="h-12 w-full md:w-44 cursor-pointer rounded-xl flex items-center gap-1"
-              variant="outline"
-              size={"lg"}
-              onClick={() => {
-                authClient.signIn.social({
-                  provider: "google",
-                });
-              }}
-            >
-              <Image src="/google.png" alt="Google" width={20} height={20} />
-              Signin with Google
-            </Button>
+            <form onSubmit={onGoogleSubmit}>
+              <LoadingButton
+                loading={isPending}
+                loadingText="Connecting..."
+                className="h-12 w-full md:w-44 cursor-pointer rounded-xl flex items-center gap-1"
+                variant="outline"
+                size="lg"
+              >
+                <Image src="/google.png" alt="Google" width={20} height={20} />
+                Signin with Google
+              </LoadingButton>
+            </form>
           </div>
-        </div>
-        <div className="max-w-7xl mx-auto border mt-10 overflow-hidden">
-          <Image
-            src="/landing.png"
-            alt="Landing"
-            width={1000}
-            height={1000}
-            className="w-full h-auto"
-          />
         </div>
       </div>
     </main>

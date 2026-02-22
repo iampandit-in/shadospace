@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/utils/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Geist_Mono, Inter, Bai_Jamjuree } from "next/font/google";
+import QueryProvider from "@/components/providers/query-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,8 +30,8 @@ const baiJamjuree = Bai_Jamjuree({
 
 export const metadata: Metadata = {
   title: {
-    default: "shadospace",
-    template: "%s | shadospace",
+    default: "Shadospace",
+    template: "%s | Shadospace",
   },
   description: "only space for all of your needs",
   keywords: [
@@ -60,16 +61,16 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "shadospace",
+    title: "Shadospace",
     description: "only space for all of your needs",
-    url: "https://shadospace.in",
+    url: "https://Shadospace.in",
     siteName: "shadospace",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "shadospace",
+    title: "Shadospace",
     description: "only space for all of your needs",
     creator: "@iampandit_in",
   },
@@ -99,7 +100,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="apple-mobile-web-app-title" content="shadospace" />
+        <meta name="apple-mobile-web-app-title" content="Shadospace" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${baiJamjuree.variable} ${inter.variable} antialiased`}
@@ -110,10 +111,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
-          <Analytics />
-          <SpeedInsights />
-          <Toaster richColors />
+          <QueryProvider>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+            <Toaster richColors />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
