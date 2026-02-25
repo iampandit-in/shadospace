@@ -1,15 +1,14 @@
-import Header from "@/components/generals/header";
-import React from "react";
+import Header from "@/components/general/header";
 
-export default function MainLayout({
+export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <>
       <Header />
-      <main className="pt-20">{children}</main>
+      {children}
     </>
   );
 }

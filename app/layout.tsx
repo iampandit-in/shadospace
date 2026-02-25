@@ -1,17 +1,7 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Geist, Geist_Mono, Inter, Bai_Jamjuree } from "next/font/google";
-import QueryProvider from "@/components/providers/query-provider";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,73 +13,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const baiJamjuree = Bai_Jamjuree({
-  variable: "--font-bai-jamjuree",
-  weight: ["400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
-  title: {
-    default: "Shadospace",
-    template: "%s | Shadospace",
-  },
-  description: "only space for all of your needs",
-  keywords: [
-    "react",
-    "medium",
-    "dev.to",
-    "hashnode",
-    "geeksforgeeks",
-    "next",
-    "typescript",
-    "shadospace",
-    "blog",
-    "tutorial",
-    "practice",
-    "socials",
-  ],
-  authors: [{ name: "Pandit Pawar" }],
-  creator: "Pandit Pawar",
-  publisher: "Pandit Pawar",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL("https://shadospace.in"),
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: "Shadospace",
-    description: "only space for all of your needs",
-    url: "https://Shadospace.in",
-    siteName: "shadospace",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Shadospace",
-    description: "only space for all of your needs",
-    creator: "@iampandit_in",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/shortcut-icon.png",
-    apple: "/apple-touch-icon.png",
-  },
+  title: "Shadospace",
+  description: "turn your youtube videos into blog articles",
 };
 
 export default function RootLayout({
@@ -98,26 +24,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="apple-mobile-web-app-title" content="Shadospace" />
-      </head>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${baiJamjuree.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.className} ${geistMono.variable} antialiased dark`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-            <Toaster richColors />
-          </QueryProvider>
-        </ThemeProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
   );
