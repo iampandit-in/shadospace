@@ -13,21 +13,10 @@ export default async function Dashboard() {
     redirect("/login");
   }
 
-  async function logout() {
-    "use server";
-    await auth.api.signOut({
-      headers: await headers(),
-    });
-    revalidatePath("/dashboard");
-  }
-
   return (
     <div className="container p-4">
       <p>dashboard {session.user.name}</p>
       <p>{session.user.email}</p>
-      <form action={logout}>
-        <LoadingButton variant={"outline"}>Logout</LoadingButton>
-      </form>
     </div>
   );
 }

@@ -17,7 +17,6 @@ import {
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
 import LoadingButton from "../utils/loading-button";
 import { useState } from "react";
 import { Input } from "../ui/input";
@@ -26,6 +25,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
+import { signInUser } from "@/server/users";
 
 const formSchema = z.object({
   email: z.email("Invalid email address"),
@@ -63,13 +64,17 @@ export function LoginForm() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       setLoading(true);
-      toast.loading("Logging in...");
-      await authClient.signIn.email({
+      toast.loading("signing in...");
+      const response = await signInUser({
         email: data.email,
         password: data.password,
       });
-      toast.success("Logged in successfully");
-      router.push("/dashboard");
+      if (response.success) {
+        toast.success(response.message);
+        router.refresh();
+      } else {
+        toast.error(response.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error("An unexpected error occurred");
@@ -90,7 +95,7 @@ export function LoginForm() {
         </CardHeader>
         <CardContent>
           <FieldGroup>
-            <Field>
+            <Field className="grid grid-cols-2 gap-2">
               <LoadingButton
                 loading={loading}
                 variant="outline"

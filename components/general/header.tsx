@@ -6,6 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -16,11 +17,19 @@ export default function Header() {
           <Image src="/logo.png" alt="Logo" width={30} height={30} />
           <p className="text-xl font-medium">Shadospace</p>
         </div>
-        <nav>
+        <nav className="flex items-center gap-2">
           {isPending ? (
-            <Skeleton className="h-8 w-8 rounded-full animate-pulse" />
+            <>
+              <Skeleton className="h-6 w-6 rounded-md animate-pulse" />
+              <Skeleton className="h-8 w-8 rounded-full animate-pulse" />
+            </>
           ) : session ? (
             <div className="flex items-center gap-2">
+              <Button variant={"secondary"} size={"icon-sm"} asChild>
+                <Link href={"/dashboard/new/post"}>
+                  <Plus />
+                </Link>
+              </Button>
               <Link href={"/dashboard"}>
                 <Avatar>
                   <AvatarImage src={session?.user.image || ""} alt="user-img" />
@@ -32,7 +41,7 @@ export default function Header() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant={"secondary"} asChild>
+              <Button asChild>
                 <Link href={"/login"}>Login</Link>
               </Button>
               <Button variant={"outline"} asChild>

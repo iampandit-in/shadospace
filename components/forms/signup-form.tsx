@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -30,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import LoadingButton from "../utils/loading-button";
+import { signUpUser } from "@/server/users";
 
 const formSchema = z
   .object({
@@ -68,28 +67,18 @@ export function SignupForm() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       setLoading(true);
-      await authClient.signUp.email(
-        {
-          email: data.email,
-          password: data.password,
-          name: data.name,
-        },
-        {
-          onRequest: () => {
-            setLoading(true);
-            toast.loading("Creating account...");
-          },
-          onSuccess: () => {
-            setLoading(false);
-            toast.success("Account created successfully");
-            router.push("/dashboard");
-          },
-          onError: (ctx) => {
-            setLoading(false);
-            toast.error(ctx.error.message);
-          },
-        },
-      );
+      toast.loading("Creating account...");
+      const response = await signUpUser({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
+      if (response.success) {
+        toast.success(response.message);
+        router.push("/dashboard");
+      } else {
+        toast.error(response.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error("An unexpected error occurred");
@@ -103,7 +92,7 @@ export function SignupForm() {
     <div className={cn("flex flex-col gap-6")}>
       <Card className="w-full sm:max-w-md">
         <CardHeader>
-          <CardTitle className="text-xl">Create your account</CardTitle>
+          <CardTitle>Create your account</CardTitle>
           <CardDescription>
             Enter your details below to create your account.
           </CardDescription>
