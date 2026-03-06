@@ -17,6 +17,15 @@ export default async function Dashboard() {
     <div className="container p-4">
       <p>dashboard {session.user.name}</p>
       <p>{session.user.email}</p>
+      <form
+        action={async () => {
+          "use server";
+          await auth.api.signOut({ headers: await headers() });
+          revalidatePath("/");
+        }}
+      >
+        <LoadingButton>Sign out</LoadingButton>
+      </form>
     </div>
   );
 }

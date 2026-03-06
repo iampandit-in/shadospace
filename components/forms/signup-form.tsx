@@ -65,26 +65,28 @@ export function SignupForm() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const toastId = toast.loading("Creating account...");
     try {
       setLoading(true);
-      toast.loading("Creating account...");
       const response = await signUpUser({
         email: data.email,
         password: data.password,
         name: data.name,
       });
       if (response.success) {
-        toast.success(response.message);
+        toast.success(response.message, {
+          id: toastId,
+          description: "please check your email",
+        });
         router.push("/dashboard");
       } else {
-        toast.error(response.message);
+        toast.error(response.message, { id: toastId });
       }
     } catch (error) {
       console.log(error);
-      toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred", { id: toastId });
     } finally {
       setLoading(false);
-      toast.dismiss();
     }
   }
 

@@ -1,26 +1,40 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { toast } from "sonner";
 import { forgotPassword } from "@/server/users";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import LoadingButton from "../utils/loading-button";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
 });
 
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ForgotPasswordFormValues>({
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
@@ -28,31 +42,70 @@ export default function ForgotPasswordForm() {
   });
 
   const onSubmit = async (data: ForgotPasswordFormValues) => {
-    const result = await forgotPassword(data.email);
-    if (result.success) {
-      toast.success(result.message);
-    } else {
-      toast.error(result.message);
+    const toadId = toast.loading("Sending email");
+    try {
+      setLoading(true);
+      const response = await forgotPassword(data.email);
+      if (response.success) {
+        toast.success(response.message, {
+          id: toadId,
+        });
+        router.push("/dashboard");
+      } else {
+        toast.error(response.message, {
+          id: toadId,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Internal server error", {
+        id: toadId,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="[EMAIL_ADDRESS]"
-          {...register("email")}
-        />
-        {errors.email && (
-          <p className="text-sm text-red-500">{errors.email.message}</p>
-        )}
-      </div>
-      <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? "Sending..." : "Send Reset Link"}
-      </Button>
-    </form>
+    <Card>
+      <CardHeader>
+        <CardTitle>Don&apos;t worry</CardTitle>
+        <CardDescription>
+          Enter your email to get resent password link
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form id="login-form" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <Controller
+              name="email"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="m@example.com"
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter className="mt-2">
+        <Field>
+          <LoadingButton loading={loading} form="login-form">
+            Login
+          </LoadingButton>
+        </Field>
+      </CardFooter>
+    </Card>
   );
 }

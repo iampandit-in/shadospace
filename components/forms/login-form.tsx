@@ -37,19 +37,19 @@ export function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const handleSocialLogin = async (provider: "github" | "google") => {
+    const toastId = toast.loading(`redirecting to ${provider}...`);
     try {
       setLoading(true);
       await authClient.signIn.social({
         provider,
       });
-      toast.success("Logged in successfully");
+      toast.success("Logged in successfully", { id: toastId });
       router.push("/dashboard");
     } catch (error) {
       console.log(error);
-      toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred", { id: toastId });
     } finally {
       setLoading(false);
-      toast.dismiss();
     }
   };
 
@@ -62,25 +62,24 @@ export function LoginForm() {
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    const toastId = toast.loading("signing in...");
     try {
       setLoading(true);
-      toast.loading("signing in...");
       const response = await signInUser({
         email: data.email,
         password: data.password,
       });
       if (response.success) {
-        toast.success(response.message);
-        router.refresh();
+        toast.success(response.message, { id: toastId });
+        router.push("/dashboard");
       } else {
-        toast.error(response.message);
+        toast.error(response.message, { id: toastId });
       }
     } catch (error) {
       console.log(error);
-      toast.error("An unexpected error occurred");
+      toast.error("An unexpected error occurred", { id: toastId });
     } finally {
       setLoading(false);
-      toast.dismiss();
     }
   }
 

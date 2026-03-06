@@ -92,6 +92,14 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  posts: many(post),
+}));
+
+export const postRelations = relations(post, ({ one }) => ({
+  user: one(user, {
+    fields: [post.userId],
+    references: [user.id],
+  }),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

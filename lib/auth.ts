@@ -2,7 +2,12 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db";
 import { schema } from "@/db/schema";
+import { Resend } from "resend";
+import { nextCookies } from "better-auth/next-js";
+import VerificationEmail from "@/components/emails/verification";
+import ResetPasswordEmail from "@/components/emails/reset-password";
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -10,8 +15,45 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    requireEmailVerification: true,
+    sendResetPasswordEmail: async ({
+      user,
+      url,
+    }: {
+      user: { email: string };
+      url: string;
+    }) => {
+      await resend.emails.send({
+        from: "Shadospace <[EMAIL_ADDRESS]>",
+        to: user.email,
+        subject: "Reset your password",
+        react: ResetPasswordEmail({
+          userEmail: user.email,
+          resetLink: url,
+        }),
+      });
+    },
   },
-  
+  emailVerification: {
+    sendVerificationEmail: async ({
+      user,
+      url,
+    }: {
+      user: { email: string };
+      url: string;
+    }) => {
+      await resend.emails.send({
+        from: "Shadospace <[EMAIL_ADDRESS]>",
+        to: user.email,
+        subject: "Verify your email address",
+        react: VerificationEmail({
+          userEmail: user.email,
+          verificationLink: url,
+        }),
+      });
+    },
+    sendOnSignUp: true,
+  },
   accountLinking: {
     enabled: true,
   },
@@ -25,4 +67,5 @@ export const auth = betterAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
   },
+  plugins: [nextCookies()],
 });
