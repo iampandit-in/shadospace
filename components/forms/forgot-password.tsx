@@ -50,7 +50,7 @@ export default function ForgotPasswordForm() {
         toast.success(response.message, {
           id: toadId,
         });
-        router.push("/dashboard");
+        router.push("/reset-password");
       } else {
         toast.error(response.message, {
           id: toadId,
@@ -102,7 +102,7 @@ export default function ForgotPasswordForm() {
       <CardFooter className="mt-2">
         <Field>
           <LoadingButton loading={loading} form="login-form">
-            Login
+            Send Email
           </LoadingButton>
         </Field>
       </CardFooter>

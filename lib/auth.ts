@@ -16,7 +16,8 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendResetPasswordEmail: async ({
+    resetPasswordUrl: `${process.env.BETTER_AUTH_URL}/reset-password`,
+    sendResetPassword: async ({
       user,
       url,
     }: {
@@ -24,7 +25,7 @@ export const auth = betterAuth({
       url: string;
     }) => {
       await resend.emails.send({
-        from: "Shadospace <[EMAIL_ADDRESS]>",
+        from: "Pandit <support@shadospace.in>",
         to: user.email,
         subject: "Reset your password",
         react: ResetPasswordEmail({
@@ -43,7 +44,7 @@ export const auth = betterAuth({
       url: string;
     }) => {
       await resend.emails.send({
-        from: "Shadospace <[EMAIL_ADDRESS]>",
+        from: "Pandit <support@shadospace.in>",
         to: user.email,
         subject: "Verify your email address",
         react: VerificationEmail({

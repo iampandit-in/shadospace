@@ -1,10 +1,11 @@
 "use client";
 
-import ForgotPasswordForm from "@/components/forms/forgot-password";
+import ResetPasswordForm from "@/components/forms/reset-password";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+export default function page() {
   return (
     <div className="flex min-h-[calc(100vh-12rem)] flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -22,7 +23,9 @@ export default function LoginPage() {
           </div>
           Shadospace
         </Link>
-        <ForgotPasswordForm />
+        <Suspense fallback={null}>
+          <ResetPasswordForm />
+        </Suspense>
       </div>
     </div>
   );

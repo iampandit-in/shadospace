@@ -70,6 +70,7 @@ export const forgotPassword = async (email: string) => {
     const res = (await auth.api.requestPasswordReset({
       body: {
         email,
+        redirectTo: `${process.env.BETTER_AUTH_URL}/reset-password`,
       },
     })) as { error?: { message?: string } };
     if (res?.error) {

@@ -6,7 +6,7 @@ import { Skeleton } from "../ui/skeleton";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
+import { PlusIcon } from "@phosphor-icons/react";
 
 export default function Header() {
   const { data: session, isPending } = authClient.useSession();
@@ -27,7 +27,7 @@ export default function Header() {
             <div className="flex items-center gap-2">
               <Button variant={"secondary"} size={"icon-sm"} asChild>
                 <Link href={"/dashboard/new/post"}>
-                  <Plus />
+                  <PlusIcon />
                 </Link>
               </Button>
               <Link href={"/dashboard"}>

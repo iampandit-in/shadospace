@@ -22,11 +22,10 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
-import { Eye, EyeClosed } from "lucide-react";
+import { EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/auth-client";
 import LoadingButton from "../utils/loading-button";
 import { signUpUser } from "@/server/users";
 
@@ -164,7 +163,7 @@ export function SignupForm() {
                           className="cursor-pointer"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? <Eye /> : <EyeClosed />}
+                          {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
                         </Button>
                       </InputGroupAddon>
                     </InputGroup>
@@ -201,7 +200,7 @@ export function SignupForm() {
                           className="cursor-pointer"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword ? <Eye /> : <EyeClosed />}
+                          {showPassword ? <EyeIcon /> : <EyeClosedIcon />}
                         </Button>
                       </InputGroupAddon>
                     </InputGroup>

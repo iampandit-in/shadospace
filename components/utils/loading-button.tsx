@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { Loader2 } from "lucide-react";
+import { SpinnerIcon } from "@phosphor-icons/react";
 import { useFormStatus } from "react-dom";
 
 export default function LoadingButton({
@@ -33,7 +33,7 @@ export default function LoadingButton({
       form={form}
       {...props}
     >
-      {pending || (loading && <Loader2 className="animate-spin" />)}
+      {pending || (loading && <SpinnerIcon className="animate-spin" />)}
       {children}
     </Button>
   );

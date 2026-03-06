@@ -114,9 +114,4 @@ const VerificationEmail = ({
   );
 };
 
-VerificationEmail.PreviewProps = {
-  userEmail: "iampandit.in@gmail.com",
-  verificationLink: "https://shadospace.in/verify?token=abc123xyz789",
-};
-
 export default VerificationEmail;
