@@ -9,13 +9,21 @@ export default function LoadingButton({
   onClick,
   variant = "default",
   children,
+  loadingText,
   className,
   loading,
   form,
   ...props
 }: {
-  variant?: "default" | "secondary" | "outline" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "secondary"
+    | "outline"
+    | "destructive"
+    | "ghost"
+    | "link";
   children: React.ReactNode;
+  loadingText?: string;
   className?: string;
   loading?: boolean;
   form?: string;
@@ -33,8 +41,8 @@ export default function LoadingButton({
       form={form}
       {...props}
     >
-      {pending || (loading && <SpinnerIcon className="animate-spin" />)}
-      {children}
+      {(pending || loading) && <SpinnerIcon className="animate-spin" />}
+      {pending || loading ? loadingText : children}
     </Button>
   );
 }

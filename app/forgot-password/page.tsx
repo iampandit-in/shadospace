@@ -12,14 +12,12 @@ export default function page() {
           href="/"
           className="flex items-center gap-2 self-center font-medium text-lg"
         >
-          <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
-            <Image
-              src={"/logo.png"}
-              height={30}
-              width={30}
-              alt="shadospace-logo"
-            />
-          </div>
+          <Image
+            src={"/logo.png"}
+            height={30}
+            width={30}
+            alt="shadospace-logo"
+          />
           Shadospace
         </Link>
         <ForgotPasswordForm />

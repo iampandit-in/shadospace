@@ -22,7 +22,7 @@ import {
 } from "../ui/card";
 import LoadingButton from "../utils/loading-button";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { InputGroup, InputGroupAddon } from "../ui/input-group";
 import { EyeIcon, EyeClosedIcon } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
@@ -43,7 +43,6 @@ type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
 
 export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const form = useForm<ResetPasswordFormValues>({
@@ -68,7 +67,7 @@ export default function ResetPasswordForm() {
         toast.success(response.message, {
           id: toadId,
         });
-        router.push("/dashboard");
+        redirect("/dashboard");
       } else {
         toast.error(response.message, {
           id: toadId,

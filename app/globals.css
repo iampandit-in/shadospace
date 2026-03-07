@@ -116,6 +116,10 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+[data-sonner-toaster] {
+  font-family: var(--font-mono) !important;
+}
+
 @utility container {
   @apply max-w-5xl mx-auto;
 }

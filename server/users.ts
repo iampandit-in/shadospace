@@ -1,6 +1,8 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
 export async function signInUser({
   email,
@@ -56,6 +58,28 @@ export async function signUpUser({
       };
     }
     return { success: true, message: "Sign up successfully" };
+  } catch (error) {
+    const e = error as { body?: { message?: string }; message?: string };
+    return {
+      success: false,
+      message: e?.body?.message || e.message || "Something went wrong",
+    };
+  }
+}
+
+export async function signOut() {
+  try {
+    const { success } = await auth.api.signOut({
+      headers: await headers(),
+    });
+    if (!success) {
+      return {
+        success: false,
+        message: "Failed to sign out",
+      };
+    }
+    revalidatePath("/dashboard");
+    return { success: true, message: "Signed out successfully" };
   } catch (error) {
     const e = error as { body?: { message?: string }; message?: string };
     return {

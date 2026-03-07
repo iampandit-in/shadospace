@@ -23,7 +23,7 @@ import {
 } from "../ui/card";
 import LoadingButton from "../utils/loading-button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 const forgotPasswordSchema = z.object({
   email: z.email("Invalid email address"),
@@ -32,7 +32,6 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -50,7 +49,7 @@ export default function ForgotPasswordForm() {
         toast.success(response.message, {
           id: toadId,
         });
-        router.push("/reset-password");
+        redirect("/reset-password");
       } else {
         toast.error(response.message, {
           id: toadId,

@@ -42,9 +42,8 @@ export function LoginForm() {
       setLoading(true);
       await authClient.signIn.social({
         provider,
+        callbackURL: "/dashboard",
       });
-      toast.success("Logged in successfully", { id: toastId });
-      router.push("/dashboard");
     } catch (error) {
       console.log(error);
       toast.error("An unexpected error occurred", { id: toastId });
@@ -169,7 +168,11 @@ export function LoginForm() {
         </CardContent>
         <CardFooter className="mt-2">
           <Field>
-            <LoadingButton loading={loading} form="login-form">
+            <LoadingButton
+              loadingText="Logging in..."
+              loading={loading}
+              form="login-form"
+            >
               Login
             </LoadingButton>
           </Field>
