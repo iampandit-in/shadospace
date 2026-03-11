@@ -1,0 +1,27 @@
+{
+  "name": "@shadospace/api",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@shadospace/auth": "workspace:*",
+    "@shadospace/db": "workspace:*",
+    "@shadospace/env": "workspace:*",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@shadospace/config": "workspace:*",
+    "hono": "catalog:",
+    "typescript": "^5"
+  }
+}

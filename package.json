@@ -1,0 +1,33 @@
+{
+  "name": "shadospace",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "check-types": "turbo check-types",
+    "dev:native": "turbo -F native dev",
+    "dev:web": "turbo -F web dev",
+    "dev:server": "turbo -F server dev",
+    "db:push": "turbo -F @shadospace/db db:push",
+    "db:studio": "turbo -F @shadospace/db db:studio",
+    "db:generate": "turbo -F @shadospace/db db:generate",
+    "db:migrate": "turbo -F @shadospace/db db:migrate"
+  },
+  "dependencies": {
+    "@shadospace/env": "workspace:*",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@shadospace/config": "workspace:*",
+    "@types/bun": "catalog:",
+    "turbo": "^2.8.12",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.28.0"
+}

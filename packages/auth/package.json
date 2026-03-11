@@ -1,0 +1,25 @@
+{
+  "name": "@shadospace/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@better-auth/expo": "catalog:",
+    "@shadospace/db": "workspace:*",
+    "@shadospace/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@shadospace/config": "workspace:*",
+    "typescript": "^5"
+  }
+}
