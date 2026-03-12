@@ -1,49 +1,28 @@
 {
   "name": "web",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "type": "module",
+  "private": true,
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
-    "serve": "vite preview",
-    "start": "vite",
-    "check-types": "tsc --noEmit"
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.1.1",
-    "@shadospace/api": "workspace:*",
-    "@shadospace/auth": "workspace:*",
-    "@shadospace/env": "workspace:*",
-    "@shadospace/ui": "workspace:*",
-    "@tailwindcss/vite": "^4.1.18",
-    "@tanstack/react-form": "catalog:",
-    "@tanstack/react-query": "^5.90.12",
-    "@tanstack/react-router": "^1.141.1",
-    "@trpc/client": "catalog:",
-    "@trpc/server": "catalog:",
-    "@trpc/tanstack-react-query": "catalog:",
-    "better-auth": "catalog:",
-    "dotenv": "catalog:",
-    "lucide-react": "catalog:",
-    "next-themes": "catalog:",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "sonner": "catalog:",
-    "zod": "catalog:"
+    "@repo/ui": "*",
+    "next": "16.1.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@shadospace/config": "workspace:*",
-    "@tanstack/react-query-devtools": "^5.91.1",
-    "@tanstack/react-router-devtools": "^1.141.1",
-    "@tanstack/router-plugin": "^1.141.1",
-    "@types/node": "^22.13.14",
-    "@types/react": "^19.2.10",
-    "@types/react-dom": "catalog:",
-    "@vitejs/plugin-react": "^4.3.4",
-    "postcss": "^8.5.3",
-    "tailwindcss": "catalog:",
-    "typescript": "^5",
-    "vite": "^6.2.2"
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "^9.39.1",
+    "typescript": "5.9.2"
   }
 }
