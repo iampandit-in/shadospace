@@ -23,7 +23,7 @@ export const auth = betterAuth({
       await sendResetPasswordEmail(user.email, url);
     },
     onExistingUserSignUp: async ({ user }) => {
-      await sendAuthEmail(user.email, "/signin");
+      await sendAuthEmail(user.email);
     },
   },
   emailVerification: {

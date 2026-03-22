@@ -80,8 +80,9 @@ export default function LoginForm() {
       });
       if (error) {
         toast.error(error.message);
+        return;
       }
-      toast.success("User logged in successfully");
+      toast.success("User signed in successfully");
       router.push("/");
     } catch (error) {
       toast.error("Something went wrong");
@@ -148,6 +149,7 @@ export default function LoginForm() {
                       align="inline-end"
                     >
                       <Button
+                        type="button"
                         variant={"ghost"}
                         onClick={togglePasswordVisibility}
                       >
@@ -159,6 +161,7 @@ export default function LoginForm() {
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -171,6 +174,7 @@ export default function LoginForm() {
             </div>
             <Field className="flex items-center gap-2 -mt-2">
               <Button
+                type="button"
                 onClick={() => {
                   loginGoogle();
                 }}
@@ -193,7 +197,12 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter className="mt-2">
         <Field>
-          <Button className="cursor-pointer" form="form" disabled={loading}>
+          <Button
+            type="submit"
+            className="cursor-pointer"
+            form="form"
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <Spinner className="size-4" /> Signing In...

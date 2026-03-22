@@ -51,6 +51,7 @@ export default function LoginForm() {
       });
       if (error) {
         toast.error(error.message);
+        return;
       }
       toast.success("Email sent successfully");
       router.push("/reset-password");
@@ -65,10 +66,10 @@ export default function LoginForm() {
   return (
     <Card className="max-w-sm w-full">
       <CardHeader>
-        <CardTitle>Forgot your password 😤</CardTitle>
+        <CardTitle>Forgot your password?</CardTitle>
         <CardDescription>
-          Don&apos;t worry ☺️ it happens to the best of us. Enter your email and
-          we&apos;ll send you a link to reset it.
+          Don&apos;t worry, it happens to the best of us. Enter your email and
+          we&apos;ll send you a reset link.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -98,7 +99,12 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter className="mt-2">
         <Field>
-          <Button className="cursor-pointer" form="form" disabled={loading}>
+          <Button
+            type="submit"
+            className="cursor-pointer"
+            form="form"
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <Spinner className="size-4" /> Sending email...
@@ -112,3 +118,4 @@ export default function LoginForm() {
     </Card>
   );
 }
+

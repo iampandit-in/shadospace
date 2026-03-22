@@ -11,8 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -127,6 +131,7 @@ function ResetPasswordForm() {
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -167,6 +172,7 @@ function ResetPasswordForm() {
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />

@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -87,7 +86,8 @@ export default function SignUpForm() {
 
   async function onSubmit(data: SignUpSchema) {
     try {
-      const { data: res, error } = await authClient.signUp.email({
+      setLoading(true);
+      const { error } = await authClient.signUp.email({
         name: data.name,
         email: data.email,
         password: data.password,
@@ -95,14 +95,17 @@ export default function SignUpForm() {
       });
       if (error) {
         toast.error(error.message);
+        return;
       }
-      if (res) {
-        toast.success("Account created! Please check your email to verify your account.");
-        router.push("/signin");
-      }
+      toast.success(
+        "Account created! Please check your email to verify your account.",
+      );
+      router.push("/signin");
     } catch (error) {
       toast.error("Something went wrong");
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -174,6 +177,7 @@ export default function SignUpForm() {
                       align="inline-end"
                     >
                       <Button
+                        type="button"
                         variant={"ghost"}
                         onClick={togglePasswordVisibility}
                       >
@@ -185,6 +189,7 @@ export default function SignUpForm() {
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -207,6 +212,7 @@ export default function SignUpForm() {
                       align="inline-end"
                     >
                       <Button
+                        type="button"
                         variant={"ghost"}
                         onClick={toggleConfirmPasswordVisibility}
                       >
@@ -218,6 +224,7 @@ export default function SignUpForm() {
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
+                  <FieldError errors={[fieldState.error]} />
                 </Field>
               )}
             />
@@ -230,6 +237,7 @@ export default function SignUpForm() {
             </div>
             <Field className="flex items-center gap-2 -mt-2">
               <Button
+                type="button"
                 onClick={() => {
                   loginGoogle();
                 }}
