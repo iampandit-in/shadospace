@@ -17,11 +17,13 @@ import * as React from "react";
 interface VerificationEmailProps {
   url?: string;
   appUrl?: string;
+  logoUrl?: string;
 }
 
 export const VerificationEmail = ({
   url,
   appUrl,
+  logoUrl,
 }: VerificationEmailProps) => {
   return (
     <Html>
@@ -31,7 +33,7 @@ export const VerificationEmail = ({
         <Body className="bg-white font-sans">
           <Container className="mx-auto py-10 px-4">
             <Img
-              src={`${appUrl}/logo.png`}
+              src={logoUrl || `${appUrl}/logo.png`}
               width="40"
               height="40"
               alt="Shadospace"
