@@ -100,7 +100,7 @@ export default function SignUpForm() {
       toast.success(
         "Account created! Please check your email to verify your account.",
       );
-      router.push("/signin");
+      router.push("/");
     } catch (error) {
       toast.error("Something went wrong");
       console.log(error);
