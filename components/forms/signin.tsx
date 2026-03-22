@@ -32,6 +32,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
+import Link from "next/link";
 
 const signInSchema = z.object({
   email: z.email("Invalid email address"),
@@ -125,7 +126,15 @@ export default function LoginForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field className="-mt-2" data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <div className="flex items-center justify-between">
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <InputGroup>
                     <InputGroupInput
                       {...field}
