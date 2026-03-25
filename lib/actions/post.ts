@@ -8,9 +8,15 @@ import { eq, and, sql } from "drizzle-orm";
 import { type JSONContent } from "@tiptap/react";
 import { put } from "@vercel/blob";
 
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+
 export async function uploadImageAction(formData: FormData) {
   const file = formData.get("file") as File;
   if (!file) throw new Error("No file provided");
+
+  if (file.size > MAX_FILE_SIZE) {
+    throw new Error("File size must be less than 4MB");
+  }
 
   const session = await auth.api.getSession({
     headers: await headers(),

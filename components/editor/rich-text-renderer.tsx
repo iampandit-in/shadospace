@@ -12,7 +12,10 @@ interface RichTextRendererProps {
   className?: string;
 }
 
-export default function RichTextRenderer({ content, className }: RichTextRendererProps) {
+export default function RichTextRenderer({
+  content,
+  className,
+}: RichTextRendererProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -38,8 +41,8 @@ export default function RichTextRenderer({ content, className }: RichTextRendere
     editorProps: {
       attributes: {
         class: cn(
-          "prose prose-sm md:prose-base lg:prose-lg dark:prose-invert max-w-none focus:outline-none",
-          className
+          "prose prose-sm md:prose-base dark:prose-invert max-w-none focus:outline-none",
+          className,
         ),
       },
     },

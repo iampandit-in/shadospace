@@ -14,17 +14,17 @@ export default function Home() {
   });
 
   return (
-    <main className="">
-      <div className="flex items-center justify-between py-8">
+    <main>
+      <div className="flex items-center justify-between mb-6 md:mt-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
             Feed
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="hidden md:block text-sm text-muted-foreground mt-1">
             Discover what&apos;s happening in the Shadospace.
           </p>
         </div>
-        <Button className="cursor-pointer" variant="default" asChild>
+        <Button className="cursor-pointer" variant="default">
           <Link href="/create/post">Create post</Link>
         </Button>
       </div>
@@ -47,7 +47,7 @@ export default function Home() {
           <p className="text-muted-foreground mb-6">
             Be the first to share something amazing!
           </p>
-          <Button variant="outline" asChild>
+          <Button variant="outline">
             <Link href="/create/post">Create your first post</Link>
           </Button>
         </div>

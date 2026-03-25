@@ -9,7 +9,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({subsets:['latin'],variable:'--font-mono'});
+const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: "Shadospace",
@@ -20,8 +20,10 @@ import { QueryProvider } from "@/components/utils/query-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-const jetbrainsMonoHeading = JetBrains_Mono({subsets:['latin'],variable:'--font-heading'});
-
+const jetbrainsMonoHeading = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
 
 export default function RootLayout({
   children,
@@ -31,7 +33,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("dark", "antialiased", geistSans.variable, "font-mono", geistMono.variable, jetbrainsMonoHeading.variable)}
+      className={cn(
+        "dark",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        jetbrainsMonoHeading.variable,
+      )}
     >
       <body>
         <TooltipProvider>

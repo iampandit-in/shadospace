@@ -20,7 +20,7 @@ export default function UserButton() {
   const { data: session, isPending } = authClient.useSession();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <div>
           {isPending ? (
             <Skeleton className="h-8 w-8 rounded-full animate-pulse" />
@@ -42,13 +42,13 @@ export default function UserButton() {
       <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel>{session?.user.email}</DropdownMenuLabel>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link href={"/profile"}>Profile</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link href={"/dashboard"}>Dashboard</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem>
             <Link href={"/settings"}>Settings</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>

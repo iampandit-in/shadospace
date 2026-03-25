@@ -187,6 +187,12 @@ export default function CreatePostPage() {
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (file) {
+                                  if (file.size > 4 * 1024 * 1024) {
+                                    toast.error(
+                                      "Image size must be less than 4MB",
+                                    );
+                                    return;
+                                  }
                                   const formData = new FormData();
                                   formData.append("file", file);
                                   uploadImage.mutate(formData);

@@ -20,7 +20,7 @@ export default function Header() {
           {session ? (
             <UserButton />
           ) : (
-            <Button className="cursor-pointer" asChild>
+            <Button className="cursor-pointer">
               <Link href={"/signin"}>Sign in</Link>
             </Button>
           )}

@@ -141,7 +141,7 @@ export default function PostCard({ post }: PostCardProps) {
             <span>{post.views ?? 0}</span>
           </div>
         </div>
-        <Button variant="outline" size="sm" className="cursor-pointer" asChild>
+        <Button variant="outline" size="sm" className="cursor-pointer">
           <Link href={`/post/${post.id}`}>Read post</Link>
         </Button>
       </CardFooter>

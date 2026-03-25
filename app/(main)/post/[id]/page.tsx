@@ -22,12 +22,11 @@ export default async function PostPage({ params }: PostPageProps) {
   await incrementViewAction(id);
 
   return (
-    <div className="max-w-3xl mx-auto mt-10">
+    <div className="max-w-3xl mx-auto mt-2 md:mt-10">
       <div className="mb-8">
         <Button
           variant="ghost"
           size="sm"
-          asChild
           className="-ml-2 mb-6 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
         >
           <Link href="/" className="flex items-center gap-2">
@@ -36,12 +35,12 @@ export default async function PostPage({ params }: PostPageProps) {
           </Link>
         </Button>
 
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6">
           {post.title}
         </h1>
 
         <div className="flex items-center gap-3 mb-6">
-          <Avatar className="size-10">
+          <Avatar className="size-8">
             {post.author.image && (
               <AvatarImage src={post.author.image} alt={post.author.name} />
             )}
@@ -50,10 +49,8 @@ export default async function PostPage({ params }: PostPageProps) {
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-semibold text-foreground leading-none mb-1">
-              {post.author.name}
-            </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm leading-none mb-0.5">{post.author.name}</p>
+            <p className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(post.createdAt), {
                 addSuffix: true,
               })}
