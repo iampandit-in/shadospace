@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useEditor, EditorContent, type JSONContent, type Editor as EditorType } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -17,7 +18,10 @@ import {
   Redo, 
   Code,
   Link as LinkIcon,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Heading1,
+  Heading2,
+  Heading3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -34,6 +38,34 @@ const Toolbar = ({ editor }: { editor: EditorType | null }) => {
 
   return (
     <div className="flex flex-wrap items-center gap-1 border-b p-1 bg-muted/50">
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        className={cn(editor.isActive("heading", { level: 1 }) && "bg-accent text-accent-foreground")}
+      >
+        <Heading1 className="h-4 w-4" />
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+        className={cn(editor.isActive("heading", { level: 2 }) && "bg-accent text-accent-foreground")}
+      >
+        <Heading2 className="h-4 w-4" />
+      </Button>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={cn(editor.isActive("heading", { level: 3 }) && "bg-accent text-accent-foreground")}
+      >
+        <Heading3 className="h-4 w-4" />
+      </Button>
+      <div className="w-px h-6 bg-border mx-1" />
       <Button
         type="button"
         variant="ghost"
@@ -181,13 +213,23 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class: cn(
-          "prose prose-sm dark:prose-invert max-w-none min-h-[150px] p-4 focus:outline-none",
+          "prose prose-base md:prose-lg dark:prose-invert max-w-none min-h-[500px] p-4 focus:outline-none",
+          "prose-h1:text-4xl prose-h1:font-extrabold prose-h1:tracking-tight prose-h1:mb-10",
+          "prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-4",
+          "prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-3",
           className
         ),
       },
     },
     immediatelyRender: false,
   });
+
+  // Keep editor content in sync with value prop
+  useEffect(() => {
+    if (editor && value && !editor.isFocused) {
+      editor.commands.setContent(value);
+    }
+  }, [value, editor]);
 
   return (
     <div className="border rounded-md overflow-hidden bg-background">

@@ -36,7 +36,6 @@ export async function uploadImageAction(formData: FormData) {
 export async function createPostAction(data: {
   title: string;
   contentJson: JSONContent;
-  communityId?: string;
   coverImageUrl?: string;
 }) {
   const session = await auth.api.getSession({
@@ -166,4 +165,43 @@ export async function incrementViewAction(postId: string) {
       })
       .where(eq(post.id, postId));
   }
+}
+
+export async function updatePostAction(data: {
+  id: string;
+  title: string;
+  contentJson: JSONContent;
+  coverImageUrl?: string;
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    throw new Error("Unauthorized");
+  }
+
+  const existingPost = await db.query.post.findFirst({
+    where: eq(post.id, data.id),
+  });
+
+  if (!existingPost) {
+    throw new Error("Post not found");
+  }
+
+  if (existingPost.authorId !== session.user.id) {
+    throw new Error("Unauthorized: You are not the author of this post");
+  }
+
+  await db
+    .update(post)
+    .set({
+      title: data.title,
+      contentJson: data.contentJson,
+      coverImageUrl: data.coverImageUrl || null,
+      updatedAt: new Date(),
+    })
+    .where(eq(post.id, data.id));
+
+  return { id: data.id };
 }

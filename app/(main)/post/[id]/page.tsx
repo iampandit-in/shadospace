@@ -6,7 +6,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RichTextRenderer from "@/components/editor/rich-text-renderer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, MessageSquare, Share2, ThumbsUp } from "lucide-react";
+import {
+  ArrowLeft,
+  MessageSquare,
+  Share2,
+  ThumbsUp,
+  Pencil,
+} from "lucide-react";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 interface PostPageProps {
   params: Promise<{ id: string }>;
@@ -19,21 +27,42 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const isAuthor = session?.user.id === post.authorId;
+
   await incrementViewAction(id);
 
   return (
-    <div className="max-w-3xl mx-auto mt-2 md:mt-10">
+    <div className="max-w-2xl mx-auto mt-2 md:mt-10">
       <div className="mb-8">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="-ml-2 mb-6 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-        >
-          <Link href="/" className="flex items-center gap-2">
-            <ArrowLeft className="size-4" />
-            <span>Back to feed</span>
-          </Link>
-        </Button>
+        <div className="flex items-center justify-between mb-6">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="-ml-2 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+          >
+            <Link href="/" className="flex items-center gap-2">
+              <ArrowLeft className="size-4" />
+              <span>Back to feed</span>
+            </Link>
+          </Button>
+
+          {isAuthor && (
+            <Button variant="outline" className="cursor-pointer">
+              <Link
+                className="flex items-center
+               gap-2"
+                href={`/create/post?edit=${post.id}`}
+              >
+                <Pencil className="size-4" />
+                <span>Edit post</span>
+              </Link>
+            </Button>
+          )}
+        </div>
 
         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6">
           {post.title}
