@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/next";
@@ -9,10 +9,7 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
+const geistMono = Geist_Mono({subsets:['latin'],variable:'--font-mono'});
 
 export const metadata: Metadata = {
   title: "Shadospace",
@@ -20,6 +17,11 @@ export const metadata: Metadata = {
 };
 
 import { QueryProvider } from "@/components/utils/query-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+
+const jetbrainsMonoHeading = JetBrains_Mono({subsets:['latin'],variable:'--font-heading'});
+
 
 export default function RootLayout({
   children,
@@ -29,12 +31,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark antialiased`}
+      className={cn("dark", "antialiased", geistSans.variable, "font-mono", geistMono.variable, jetbrainsMonoHeading.variable)}
     >
       <body>
-        <QueryProvider>
-          <main>{children}</main>
-        </QueryProvider>
+        <TooltipProvider>
+          <QueryProvider>
+            <main>{children}</main>
+          </QueryProvider>
+        </TooltipProvider>
         <Toaster richColors />
         <Analytics />
       </body>
