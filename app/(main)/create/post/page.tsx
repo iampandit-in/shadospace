@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
@@ -51,7 +51,7 @@ const createPostSchema = z.object({
 
 type CreatePostValues = z.infer<typeof createPostSchema>;
 
-export default function CreateOrEditPostPage() {
+function PostEditor() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get("edit");
@@ -372,5 +372,19 @@ export default function CreateOrEditPostPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CreateOrEditPostPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[80vh] items-center justify-center">
+          <Spinner className="h-8 w-8 text-primary" />
+        </div>
+      }
+    >
+      <PostEditor />
+    </Suspense>
   );
 }
